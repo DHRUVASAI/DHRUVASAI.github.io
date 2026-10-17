@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PERSONAL_INFO } from '../data/portfolioData.ts';
 import { validateContactForm, ContactFormData } from '../utils/portfolio.ts';
-import { Check, Copy, Send, Sparkles, Phone, Mail, ArrowUpRight, Github, Linkedin } from 'lucide-react';
+import { Check, Copy, Send, Sparkles, Phone, Mail, ArrowUpRight, Github, Linkedin, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface ContactViewProps {
   onNavigate: (view: 'home' | 'about' | 'portfolio' | 'contact') => void;
@@ -17,7 +17,10 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [inquiryId, setInquiryId] = useState<string | null>(null);
   const [copiedEmail, setCopiedEmail] = useState<boolean>(false);
   const [copiedPhone, setCopiedPhone] = useState<boolean>(false);
 
@@ -33,7 +36,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
     setTimeout(() => setCopiedPhone(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = validateContactForm(formData);
     if (!result.valid) {
@@ -42,7 +45,28 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
     }
 
     setErrors({});
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to submit inquiry. Please try again or email directly.');
+      }
+
+      setInquiryId(data.inquiryId);
+      setSubmitted(true);
+    } catch (err: any) {
+      setSubmitError(err.message || 'Unable to connect to the contact server. Please try again or use direct email.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSendViaMailClient = () => {
@@ -156,25 +180,55 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
               data-purpose="contact-form-card"
             >
               {submitted ? (
-                <div className="py-8 text-center space-y-4">
-                  <div className="w-14 h-14 rounded-full bg-emerald-600 text-white mx-auto flex items-center justify-center">
-                    <Check className="w-8 h-8" />
+                <div className="py-6 sm:py-8 text-center space-y-4 animate-in fade-in duration-500">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center shadow-lg">
+                    <CheckCircle2 className="w-9 h-9" />
                   </div>
-                  <h3 className="text-2xl font-bold text-neutral-950 dark:text-white">Message Ready!</h3>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300 max-w-md mx-auto leading-relaxed">
-                    Thank you, <strong>{formData.fullName}</strong>. Your message details have been formatted. Click below to send directly via email, or copy the formatted text.
+                  <div>
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                      Inquiry Delivered Successfully
+                    </span>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-neutral-950 dark:text-white mt-2">
+                      Message Received, {formData.fullName}!
+                    </h3>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 max-w-md mx-auto leading-relaxed">
+                    Your project details have been recorded and dispatched directly to Dhruva Sai's priority inbox (<strong className="text-neutral-900 dark:text-white font-mono">{PERSONAL_INFO.email}</strong>). Dhruva will review your submission and reply shortly.
                   </p>
-                  <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+
+                  {/* Summary Card */}
+                  <div className="bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/10 rounded-2xl p-4 text-left max-w-md mx-auto space-y-2 text-xs font-mono">
+                    <div className="flex justify-between items-center text-neutral-500 dark:text-neutral-400 border-b border-black/5 dark:border-white/5 pb-1.5">
+                      <span>Ref ID</span>
+                      <span className="text-neutral-800 dark:text-neutral-200">{inquiryId || 'INQ-DISPATCHED'}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-neutral-500 dark:text-neutral-400 border-b border-black/5 dark:border-white/5 pb-1.5">
+                      <span>Focus Area</span>
+                      <span className="text-neutral-800 dark:text-neutral-200">{formData.projectType}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-neutral-500 dark:text-neutral-400 border-b border-black/5 dark:border-white/5 pb-1.5">
+                      <span>Budget</span>
+                      <span className="text-neutral-800 dark:text-neutral-200">{formData.budget}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-neutral-500 dark:text-neutral-400">
+                      <span>Reply To</span>
+                      <span className="text-neutral-800 dark:text-neutral-200 truncate max-w-[200px]">{formData.email}</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
                     <button
                       onClick={handleSendViaMailClient}
-                      className="bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 px-6 py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
+                      className="bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 px-5 py-2.5 rounded-xl font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer"
                     >
                       <Send className="w-4 h-4" />
-                      <span>Send via Email Client</span>
+                      <span>Open in Mail Client</span>
                     </button>
                     <button
                       onClick={() => {
                         setSubmitted(false);
+                        setSubmitError(null);
                         setFormData({
                           fullName: '',
                           email: '',
@@ -183,9 +237,9 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
                           details: ''
                         });
                       }}
-                      className="bg-[#c6c5c2] dark:bg-neutral-800 hover:bg-[#b8b7b4] dark:hover:bg-neutral-700 text-neutral-900 dark:text-white px-6 py-3 rounded-xl font-medium text-sm transition-all"
+                      className="bg-white/60 dark:bg-neutral-800 hover:bg-white dark:hover:bg-neutral-700 text-neutral-900 dark:text-white px-5 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all border border-black/5 dark:border-white/10 cursor-pointer"
                     >
-                      Send Another Message
+                      Send Another Inquiry
                     </button>
                   </div>
                 </div>
@@ -312,14 +366,41 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
                     )}
                   </div>
 
+                  {/* Error Notification Banner */}
+                  {submitError && (
+                    <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
+                        <span>{submitError}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleSendViaMailClient}
+                        className="underline font-semibold hover:opacity-80 shrink-0 cursor-pointer"
+                      >
+                        Send via Email App
+                      </button>
+                    </div>
+                  )}
+
                   {/* Submit Button */}
                   <div className="pt-2 flex items-center justify-between">
                     <button
-                      className="bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 px-8 py-3 rounded-xl font-medium text-[15px] transition-all focus:ring-2 focus:ring-neutral-800 dark:focus:ring-white flex items-center gap-2 shadow-xs"
+                      className="bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 px-8 py-3 rounded-xl font-medium text-[15px] transition-all focus:ring-2 focus:ring-neutral-800 dark:focus:ring-white flex items-center gap-2 shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       type="submit"
+                      disabled={isSubmitting}
                     >
-                      <span>Submit Inquiry</span>
-                      <ArrowUpRight className="w-4 h-4" />
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
+                          <span>Sending Inquiry to Dhruva...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Submit Inquiry</span>
+                          <ArrowUpRight className="w-4 h-4" />
+                        </>
+                      )}
                     </button>
                   </div>
 

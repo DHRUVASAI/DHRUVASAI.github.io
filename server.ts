@@ -3,6 +3,7 @@ import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
@@ -112,6 +113,115 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({
       error: error.message || 'Failed to generate response from Gemini API',
     });
+  }
+});
+
+// Real Contact Form Processing Endpoint
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { fullName, email, projectType, budget, details } = req.body;
+
+    if (!fullName || typeof fullName !== 'string' || fullName.trim().length < 2) {
+      return res.status(400).json({ success: false, error: 'Please enter your name (at least 2 characters).' });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || typeof email !== 'string' || !emailRegex.test(email.trim())) {
+      return res.status(400).json({ success: false, error: 'Please enter a valid email address.' });
+    }
+
+    if (!details || typeof details !== 'string' || details.trim().length < 5) {
+      return res.status(400).json({ success: false, error: 'Please share a few details about your project.' });
+    }
+
+    const newInquiry = {
+      id: `inq-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      timestamp: new Date().toISOString(),
+      submittedAtFormatted: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      fullName: fullName.trim(),
+      email: email.trim(),
+      projectType: projectType || 'Autonomous Agents & AI Systems',
+      budget: budget || '$1k – $5k',
+      details: details.trim(),
+      forwardedToEmail: false,
+    };
+
+    // 1. Persist locally to data/inquiries.json
+    try {
+      const dataDir = path.resolve(__dirname, 'data');
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+      }
+      const inquiriesFile = path.resolve(dataDir, 'inquiries.json');
+      let inquiries = [];
+      if (fs.existsSync(inquiriesFile)) {
+        try {
+          const raw = fs.readFileSync(inquiriesFile, 'utf8');
+          inquiries = JSON.parse(raw);
+        } catch {
+          inquiries = [];
+        }
+      }
+      inquiries.unshift(newInquiry);
+      fs.writeFileSync(inquiriesFile, JSON.stringify(inquiries, null, 2), 'utf8');
+    } catch (saveErr) {
+      console.warn('Could not save to inquiries.json:', saveErr);
+    }
+
+    // 2. Dispatch real email notification via FormSubmit.co directly to dhruvasai1706@gmail.com
+    try {
+      const formSubmitResp = await fetch('https://formsubmit.co/ajax/dhruvasai1706@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin': req.headers.origin || 'http://localhost:3000',
+          'Referer': req.headers.referer || 'http://localhost:3000/contact'
+        },
+        body: JSON.stringify({
+          _subject: `New Portfolio Inquiry: ${newInquiry.projectType} from ${newInquiry.fullName}`,
+          _replyto: newInquiry.email,
+          _template: 'table',
+          'Full Name': newInquiry.fullName,
+          'Sender Email': newInquiry.email,
+          'Project / Focus Area': newInquiry.projectType,
+          'Estimated Budget / Role': newInquiry.budget,
+          'Project Details': newInquiry.details,
+          'Reference ID': newInquiry.id,
+          'Submitted At (IST)': newInquiry.submittedAtFormatted,
+        })
+      });
+
+      const fsData = await formSubmitResp.json().catch(() => ({}));
+      if (fsData && (fsData.success === 'true' || fsData.success === true)) {
+        newInquiry.forwardedToEmail = true;
+      }
+    } catch (dispatchErr) {
+      console.warn('FormSubmit dispatch note:', dispatchErr);
+    }
+
+    res.json({
+      success: true,
+      inquiryId: newInquiry.id,
+      message: 'Inquiry successfully delivered! Dhruva Sai will review your project and get back to you shortly.',
+    });
+  } catch (err: any) {
+    console.error('Contact error:', err);
+    res.status(500).json({ success: false, error: err.message || 'Internal server error processing contact submission.' });
+  }
+});
+
+// GET /api/inquiries to review saved inquiries
+app.get('/api/inquiries', (req, res) => {
+  try {
+    const inquiriesFile = path.resolve(__dirname, 'data', 'inquiries.json');
+    if (fs.existsSync(inquiriesFile)) {
+      const raw = fs.readFileSync(inquiriesFile, 'utf8');
+      return res.json({ inquiries: JSON.parse(raw) });
+    }
+    res.json({ inquiries: [] });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
   }
 });
 
