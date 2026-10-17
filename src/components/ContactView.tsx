@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PERSONAL_INFO } from '../data/portfolioData.ts';
 import { validateContactForm, ContactFormData } from '../utils/portfolio.ts';
 import { Check, Copy, Send, Sparkles, Phone, Mail, ArrowUpRight, Github, Linkedin, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { VisitorCounter } from './VisitorCounter.tsx';
 
 interface ContactViewProps {
   onNavigate: (view: 'home' | 'about' | 'portfolio' | 'contact') => void;
@@ -566,12 +567,15 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-10 mt-10 border-t border-neutral-300/60 dark:border-white/10 text-xs text-neutral-500 dark:text-neutral-400">
           <div>© 2026 Dhruva Sai. Hyderabad, India.</div>
-          <button
-            onClick={() => onNavigate('home')}
-            className="text-neutral-900 dark:text-neutral-200 font-semibold hover:underline"
-          >
-            ← Back to Home
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <VisitorCounter />
+            <button
+              onClick={() => onNavigate('home')}
+              className="text-neutral-900 dark:text-neutral-200 font-semibold hover:underline"
+            >
+              ← Back to Home
+            </button>
+          </div>
         </div>
       </footer>
     </div>

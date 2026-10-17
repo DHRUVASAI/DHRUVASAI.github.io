@@ -3,6 +3,7 @@ import { PROJECTS, Project, PERSONAL_INFO } from '../data/portfolioData.ts';
 import { filterProjects } from '../utils/portfolio.ts';
 import { ArrowUpRight, Github, ExternalLink, Activity, Shield, Sparkles, Terminal, Cpu, Database, Network, GitBranch, Layers, CheckCircle2 } from 'lucide-react';
 import { GitDiagramArchitecture } from './GitDiagramArchitecture.tsx';
+import { VisitorCounter } from './VisitorCounter.tsx';
 
 interface PortfolioViewProps {
   onOpenProject: (projectId: string) => void;
@@ -758,12 +759,15 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-10 mt-10 border-t border-neutral-300/60 dark:border-white/10 text-xs text-neutral-500 dark:text-neutral-400">
           <div>© 2026 Dhruva Sai. Hyderabad, India.</div>
-          <button
-            onClick={() => onNavigate('contact')}
-            className="text-neutral-900 dark:text-white font-semibold hover:underline"
-          >
-            Start a project together →
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <VisitorCounter />
+            <button
+              onClick={() => onNavigate('contact')}
+              className="text-neutral-900 dark:text-white font-semibold hover:underline"
+            >
+              Start a project together →
+            </button>
+          </div>
         </div>
       </footer>
     </div>

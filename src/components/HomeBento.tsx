@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { IdentityCard } from './IdentityCard.tsx';
 import { TechStackWidget } from './TechStackWidget.tsx';
+import { VisitorCounter } from './VisitorCounter.tsx';
 
 interface HomeBentoProps {
   onNavigate: (view: 'home' | 'about' | 'portfolio' | 'contact') => void;
@@ -446,8 +447,21 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
             </button>
           </div>
         </div>
-
       </div>
+
+      {/* Footer Bottom Bar with Live Visitor Counter */}
+      <footer className="w-full pt-12 mt-8 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 dark:text-neutral-400">
+        <div>
+          © 2026 {PERSONAL_INFO.name}. Built with precision and clarity.
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <VisitorCounter />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-200 text-xs font-medium border border-neutral-300 dark:border-white/10 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>Open to Opportunities</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

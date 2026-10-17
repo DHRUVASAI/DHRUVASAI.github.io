@@ -3,6 +3,7 @@ import { PERSONAL_INFO, FOCUS_AREAS, PROJECTS } from '../data/portfolioData.ts';
 import { ArrowUpRight, Github, Linkedin, Mail, Phone, ExternalLink } from 'lucide-react';
 import { IdentityCard } from './IdentityCard.tsx';
 import { TechStackWidget } from './TechStackWidget.tsx';
+import { VisitorCounter } from './VisitorCounter.tsx';
 
 interface AboutViewProps {
   onNavigate: (view: 'home' | 'about' | 'portfolio' | 'contact') => void;
@@ -455,7 +456,8 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
           <p className="text-xs text-neutral-500 dark:text-neutral-400">
             © 2026 Dhruva Sai. Built with precision and clarity.
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <VisitorCounter />
             <button
               onClick={() => onNavigate('contact')}
               className="text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors shadow-xs"
