@@ -17,6 +17,7 @@ import {
   Minimize2,
   MessageSquare
 } from 'lucide-react';
+import { sendMessageToDobby } from '../services/geminiService';
 
 interface ChatMessage {
   id: string;
@@ -123,22 +124,8 @@ Ask me anything about Dhruva's technical systems, architecture blueprints, or ba
           content: m.content
         }));
 
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: text,
-          history: historyForApi,
-          model: selectedModel
-        })
-      });
+      const data = await sendMessageToDobby(text, historyForApi, selectedModel);
 
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `HTTP ${res.status}: Failed to reach Gemini API`);
-      }
-
-      const data = await res.json();
       const botMessage: ChatMessage = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
