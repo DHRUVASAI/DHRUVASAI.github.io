@@ -9,7 +9,7 @@ interface OpeningAnimationProps {
 export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Sync video audio track with soundEnabled state
@@ -19,13 +19,47 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     }
   }, [soundEnabled]);
 
-  // Ensure autoplay starts smoothly on mount
+  // Start with audio enabled by default; gracefully handle browser autoplay restrictions
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // Autoplay handled gracefully by browser policies
-      });
-    }
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Explicitly unmute by default
+    video.muted = false;
+
+    const playWithAudio = async () => {
+      try {
+        await video.play();
+        setSoundEnabled(true);
+      } catch {
+        // If the browser policy restricts unmuted autoplay prior to user interaction,
+        // play muted initially so the visual video plays, then immediately unmute on first user touch/click/key
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+          videoRef.current.play().catch(() => {});
+          setSoundEnabled(false);
+        }
+
+        const unlockAudio = () => {
+          if (videoRef.current) {
+            videoRef.current.muted = false;
+            videoRef.current.play().catch(() => {});
+            setSoundEnabled(true);
+          }
+          window.removeEventListener('pointerdown', unlockAudio);
+          window.removeEventListener('touchstart', unlockAudio);
+          window.removeEventListener('click', unlockAudio);
+          window.removeEventListener('keydown', unlockAudio);
+        };
+
+        window.addEventListener('pointerdown', unlockAudio, { once: true });
+        window.addEventListener('touchstart', unlockAudio, { once: true });
+        window.addEventListener('click', unlockAudio, { once: true });
+        window.addEventListener('keydown', unlockAudio, { once: true });
+      }
+    };
+
+    playWithAudio();
   }, []);
 
   useEffect(() => {
