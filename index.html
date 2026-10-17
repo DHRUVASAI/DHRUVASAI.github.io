@@ -71,8 +71,25 @@
       ]
     }
     </script>
+
+    <!-- Immediate Theme Initialization Script (prevents theme flash & ensures dark mode works seamlessly) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('dhruva_theme_mode');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'dark' || (!saved && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.removeAttribute('data-theme');
+          }
+        } catch(e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-[#ECECEB] text-[#111111] antialiased selection:bg-neutral-900 selection:text-neutral-100 min-h-screen">
+  <body class="bg-[#ECECEB] dark:bg-[#090A0E] text-[#111111] dark:text-[#ECECED] antialiased selection:bg-neutral-900 selection:text-neutral-100 min-h-screen">
     <!-- Netlify Native Form Detection -->
     <form name="portfolio-contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="hidden" name="form-name" value="portfolio-contact" />

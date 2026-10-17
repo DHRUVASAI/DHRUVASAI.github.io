@@ -17,7 +17,19 @@ function AppContent() {
   const [currentView, setCurrentView] = useState<ViewType>('home');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
-  const [showOpening, setShowOpening] = useState<boolean>(true);
+  const [showOpening, setShowOpening] = useState<boolean>(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const hash = window.location.hash.replace('#', '').toLowerCase();
+        if (hash === 'about' || hash === 'portfolio' || hash === 'contact') {
+          return false;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return true;
+  });
   const [isRevealing, setIsRevealing] = useState<boolean>(false);
 
   const handleOpeningComplete = () => {
@@ -56,6 +68,14 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-[#ECECEB] dark:bg-[#090A0E] text-[#111111] dark:text-[#ECECED] flex flex-col justify-between selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-300 relative overflow-x-hidden">
+      {/* Skip to Main Content Link for Keyboard & Screen Readers */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-neutral-900 focus:text-white dark:focus:bg-white dark:focus:text-neutral-900 focus:rounded-xl focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold"
+      >
+        Skip to main content
+      </a>
+
       {/* Opening Intro Animation */}
       {showOpening && (
         <OpeningAnimation
@@ -86,7 +106,9 @@ function AppContent() {
 
       {/* Main View Transition from Opening Animation */}
       <main
-        className={`flex-1 flex flex-col justify-start transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        id="main-content"
+        tabIndex={-1}
+        className={`flex-1 flex flex-col justify-start outline-none transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           showOpening
             ? 'opacity-0 scale-[0.98] translate-y-8 blur-[2px] pointer-events-none'
             : 'opacity-100 scale-100 translate-y-0 blur-0'

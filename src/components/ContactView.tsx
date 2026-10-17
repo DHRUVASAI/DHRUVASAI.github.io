@@ -11,8 +11,8 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
   const [formData, setFormData] = useState<ContactFormData>({
     fullName: '',
     email: '',
-    projectType: 'Autonomous Agents & AI Systems',
-    budget: '$1k – $5k',
+    projectType: '',
+    budget: '',
     details: ''
   });
 
@@ -144,7 +144,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
 
   return (
     <div className="w-full">
-      <main className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-16 flex-1">
+      <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-16 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
           {/* Left Hero Column */}
@@ -310,8 +310,8 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
                         setFormData({
                           fullName: '',
                           email: '',
-                          projectType: 'Autonomous Agents & AI Systems',
-                          budget: '$1k – $5k',
+                          projectType: '',
+                          budget: '',
                           details: ''
                         });
                       }}
@@ -411,6 +411,9 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
                           </label>
                         ))}
                       </div>
+                      {errors.projectType && (
+                        <p className="text-xs text-red-600 dark:text-red-400 mt-1.5 font-medium">{errors.projectType}</p>
+                      )}
                     </div>
 
                     {/* Project Budget */}
@@ -511,7 +514,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ onNavigate }) => {
             </section>
           </div>
         </div>
-      </main>
+      </div>
 
       {/* Footer Section */}
       <footer className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-16 pb-12 border-t border-[#cbcaa6]/50 dark:border-white/10 mt-12 transition-colors">

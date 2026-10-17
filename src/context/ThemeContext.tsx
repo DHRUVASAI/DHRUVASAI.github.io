@@ -28,11 +28,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
+    const body = document.body;
+    const isDark = theme === 'dark';
+
+    if (isDark) {
       root.classList.add('dark');
+      root.setAttribute('data-theme', 'dark');
+      body?.classList.add('dark');
     } else {
       root.classList.remove('dark');
+      root.removeAttribute('data-theme');
+      body?.classList.remove('dark');
     }
+
+    // Dynamically update mobile browser theme-color
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]:not([media])');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', isDark ? '#090A0E' : '#ECECEB');
+    }
+
     try {
       localStorage.setItem('dhruva_theme_mode', theme);
     } catch {

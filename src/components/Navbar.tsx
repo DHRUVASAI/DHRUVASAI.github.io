@@ -115,8 +115,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Night Mode Toggle Button */}
           <button
+            id="theme-toggle"
+            data-testid="theme-toggle"
             onClick={toggleTheme}
-            className="p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-white/70 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 border border-black/5 dark:border-white/10 text-neutral-800 dark:text-neutral-200 transition-all shadow-xs cursor-pointer"
+            aria-pressed={theme === 'dark'}
+            className="p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-white/70 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 border border-black/5 dark:border-white/10 text-neutral-800 dark:text-neutral-200 transition-all shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500"
             title={theme === 'dark' ? 'Switch to Daylight Mode' : 'Switch to Night Mode'}
             aria-label="Toggle Night Mode"
           >
@@ -131,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenResume}
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 hover:bg-black dark:hover:bg-neutral-100 text-xs font-semibold transition-all shadow-xs"
-              title="View Dhruva's verified resume PDF"
+              title="View Dhruva's resume"
             >
               <FileText className="w-3.5 h-3.5" />
               <span>Resume</span>

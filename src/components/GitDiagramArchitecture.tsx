@@ -1,9 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   GitBranch,
   Maximize2,
-  Upload,
-  RotateCcw,
   ExternalLink,
   Cpu,
   Database,
@@ -49,53 +47,6 @@ export const GitDiagramArchitecture: React.FC<GitDiagramProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [urlInput, setUrlInput] = useState('');
-  const [dragActive, setDragActive] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          onUpdateDiagramImage(project.id, reader.result);
-          setViewMode('image');
-          setShowUploadModal(false);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          onUpdateDiagramImage(project.id, reader.result);
-          setViewMode('image');
-          setShowUploadModal(false);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleUrlSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (urlInput.trim()) {
-      onUpdateDiagramImage(project.id, urlInput.trim());
-      setUrlInput('');
-      setViewMode('image');
-      setShowUploadModal(false);
-    }
-  };
 
   // ==========================================
   // 1. ULTRA-DETAILED GITDIAGRAM BLUEPRINT
@@ -1474,60 +1425,12 @@ export const GitDiagramArchitecture: React.FC<GitDiagramProps> = ({
       );
     }
 
-    // High-fidelity fallback illustration if no local uploaded file yet
-    return (
-      <div className="w-full h-full flex flex-col justify-between p-4 sm:p-6 text-white select-none">
-        <div className="flex items-center justify-between text-xs pb-2 border-b border-neutral-800 font-mono">
-          <span className="text-neutral-300 flex items-center gap-1.5">
-            <ImageIcon className="w-3.5 h-3.5 text-indigo-400" />
-            Original GitDiagram Image Slot
-          </span>
-          <span className="text-neutral-500 text-[10px]">Ready for PNG / JPG</span>
-        </div>
-
-        <div className="my-auto flex flex-col items-center justify-center text-center p-4">
-          <div className="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-700/80 flex items-center justify-center text-indigo-400 mb-3 shadow-inner">
-            <GitBranch className="w-6 h-6" />
-          </div>
-          <h4 className="font-semibold text-sm text-neutral-200">
-            {project.title} GitDiagram Image
-          </h4>
-          <p className="text-xs text-neutral-400 max-w-md mt-1 mb-4 leading-relaxed">
-            View the high-detail blueprint directly or upload your original GitDiagram PNG/JPG diagram to display it here without modifications.
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <button
-              onClick={() => setViewMode('detailed')}
-              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-medium flex items-center gap-1.5 transition-colors shadow-md"
-            >
-              <Workflow className="w-3.5 h-3.5" />
-              <span>View Full GitDiagram Blueprint</span>
-            </button>
-            <button
-              onClick={() => setShowUploadModal(true)}
-              className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-200 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-colors"
-            >
-              <Upload className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Upload / Replace Original File</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="text-[10px] text-neutral-500 font-mono text-center pt-2 border-t border-neutral-800/80">
-          Tip: You can drag and drop your diagram image anywhere on this card.
-        </div>
-      </div>
-    );
+    return renderDetailedBlueprint();
   };
 
   return (
     <div
       className="relative w-full aspect-[16/10] bg-[#090a0f] rounded-2xl overflow-hidden border border-neutral-800 shadow-2xl flex flex-col justify-between group/arch"
-      onDragEnter={() => setDragActive(true)}
-      onDragLeave={() => setDragActive(false)}
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={handleDrop}
     >
       {/* Background Blueprint Grid pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#1e2235_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-60" />
@@ -1578,36 +1481,16 @@ export const GitDiagramArchitecture: React.FC<GitDiagramProps> = ({
                 ? 'bg-indigo-600 text-white font-semibold shadow-sm'
                 : 'text-neutral-400 hover:text-neutral-200'
             }`}
-            title="Original image view with upload & replace"
+            title="System architecture diagram view"
           >
             <ImageIcon className="w-3 h-3" />
-            <span className="hidden sm:inline">Original Image</span>
-            <span className="sm:hidden">Image</span>
+            <span className="hidden sm:inline">Architecture Diagram</span>
+            <span className="sm:hidden">Diagram</span>
           </button>
         </div>
 
-        {/* Quick Tools: Upload, Reset, Fullscreen */}
+        {/* Quick Tools: Fullscreen Inspector */}
         <div className="flex items-center gap-1.5">
-          <button
-            onClick={() => setShowUploadModal(true)}
-            className="flex items-center gap-1 text-[10px] text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 px-2 py-0.5 rounded transition-colors"
-            title="Upload custom GitDiagram PNG/JPG"
-          >
-            <Upload className="w-3 h-3 text-indigo-400" />
-            <span className="hidden md:inline">Upload Image</span>
-          </button>
-
-          {customDiagramImage && (
-            <button
-              onClick={() => onUpdateDiagramImage(project.id, null)}
-              className="flex items-center gap-1 text-[10px] text-neutral-400 hover:text-rose-300 bg-neutral-900 border border-neutral-700 px-2 py-0.5 rounded transition-colors"
-              title="Reset custom image"
-            >
-              <RotateCcw className="w-3 h-3" />
-              <span className="hidden md:inline">Reset</span>
-            </button>
-          )}
-
           <button
             onClick={() => setIsFullscreen(true)}
             className="flex items-center gap-1 text-[10px] text-neutral-200 hover:text-white bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 px-2 py-0.5 rounded transition-colors"
@@ -1624,91 +1507,7 @@ export const GitDiagramArchitecture: React.FC<GitDiagramProps> = ({
         {viewMode === 'detailed' && renderDetailedBlueprint()}
         {viewMode === 'telemetry' && renderTelemetryPipeline()}
         {viewMode === 'image' && renderOriginalImageView()}
-
-        {/* Drag overlay */}
-        {dragActive && (
-          <div className="absolute inset-0 z-20 bg-indigo-950/85 backdrop-blur-sm border-2 border-dashed border-indigo-400 flex flex-col items-center justify-center text-white">
-            <Upload className="w-8 h-8 text-indigo-300 animate-bounce mb-2" />
-            <p className="text-xs font-mono font-medium">Drop GitDiagram image here to load</p>
-          </div>
-        )}
       </div>
-
-      {/* Upload/Replace Modal */}
-      {showUploadModal && (
-        <div className="absolute inset-0 z-30 bg-black/90 backdrop-blur-md p-4 sm:p-6 flex flex-col justify-between animate-in fade-in duration-150">
-          <div className="flex items-center justify-between border-b border-neutral-800 pb-2.5">
-            <div className="flex items-center gap-2">
-              <Upload className="w-4 h-4 text-indigo-400" />
-              <h4 className="text-xs font-semibold text-white">
-                Upload Original GitDiagram for {project.title}
-              </h4>
-            </div>
-            <button
-              onClick={() => setShowUploadModal(false)}
-              className="text-neutral-400 hover:text-white p-1"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="space-y-4 my-auto py-2">
-            <div>
-              <label className="block text-[11px] font-mono text-neutral-300 mb-1.5">
-                Option 1: Choose Image from Computer (PNG, JPG, WebP)
-              </label>
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full py-3 px-4 bg-neutral-900 hover:bg-neutral-800 border border-dashed border-neutral-700 hover:border-indigo-500 rounded-xl text-xs text-neutral-300 flex items-center justify-center gap-2 transition-colors font-mono"
-              >
-                <Upload className="w-4 h-4 text-indigo-400" />
-                Select File from Disk or Drop Here
-              </button>
-            </div>
-
-            <form onSubmit={handleUrlSubmit}>
-              <label className="block text-[11px] font-mono text-neutral-300 mb-1.5">
-                Option 2: Paste Direct Image URL
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="url"
-                  placeholder="https://.../diagram.png"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  className="flex-1 bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-indigo-500 font-mono"
-                />
-                <button
-                  type="submit"
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3.5 py-1.5 rounded-xl font-medium transition-colors"
-                >
-                  Apply
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div className="text-[10px] text-neutral-500 font-mono text-center border-t border-neutral-800 pt-2 flex items-center justify-between">
-            <span>Images saved locally in browser storage</span>
-            <button
-              onClick={() => {
-                setShowUploadModal(false);
-                setViewMode('detailed');
-              }}
-              className="text-indigo-400 hover:underline"
-            >
-              Use Built-In Detailed Blueprint
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Fullscreen Inspector Modal */}
       {isFullscreen && (

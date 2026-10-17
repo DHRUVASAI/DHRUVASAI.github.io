@@ -39,7 +39,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
   };
 
   return (
-    <main className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-4 pb-16 flex-1 flex flex-col justify-start">
+    <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-4 pb-16 flex-1 flex flex-col justify-start">
       {/* Hero Headline Section - Visible, Unobstructed, Crisp */}
       <section className="w-full pt-2 pb-6 md:pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-black/10 dark:border-white/10 transition-colors">
         <div>
@@ -154,9 +154,9 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
                 </div>
                 <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 transition-colors">
-                  GARUDA-X
+                  GARUDA
                 </div>
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">Network Threat Intel</p>
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate font-mono">Python · Scapy · SOC HUD</p>
               </div>
 
               <div
@@ -170,7 +170,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400 transition-colors">
                   EDGE Engine
                 </div>
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">Cricket AI Analytics</p>
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate font-mono">DuckDB · Monte Carlo</p>
               </div>
 
               <div
@@ -184,7 +184,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-amber-600 dark:group-hover/item:text-amber-400 transition-colors">
                   TeamForge AI
                 </div>
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">Agentic Engineering</p>
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate font-mono">Nemotron · Swarm DAG</p>
               </div>
             </div>
           </div>
@@ -366,7 +366,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 className="bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 rounded-xl px-4 py-2 flex items-center justify-center gap-2 text-xs font-bold shadow-xs transition-all shrink-0 cursor-pointer w-full xl:w-auto"
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span>Open Resume PDF</span>
+                <span>View Resume</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -448,6 +448,6 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
         </div>
 
       </div>
-    </main>
+    </div>
   );
 };

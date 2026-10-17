@@ -16,7 +16,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
 
   return (
     <div className="w-full">
-      <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-20">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-20">
         {/* Title Section */}
         <section className="mb-12 md:mb-16">
           <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-neutral-950 dark:text-white transition-colors">
@@ -35,7 +35,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
               I'm Dhruva Sai — a computer science student and builder fascinated by the space where artificial intelligence, engineering, and thoughtful product design meet. I enjoy taking complex ideas and turning them into systems that are not only technically interesting, but genuinely useful.
             </p>
             <p className="text-base sm:text-lg md:text-xl font-normal leading-relaxed text-neutral-900 dark:text-neutral-200 transition-colors">
-              My work spans AI/ML, agentic systems, cybersecurity, cloud computing, and full-stack development. From building <strong className="font-semibold text-neutral-950 dark:text-white">GARUDA-X</strong>, a context-aware network defense platform, to exploring AI-powered social experiences with <strong className="font-semibold text-neutral-950 dark:text-white">VibeVerse</strong>, I'm drawn to problems that demand more than a standard solution. I care about how a system thinks, how it behaves in the real world, and how people experience using it.
+              My work spans AI/ML, agentic systems, cybersecurity, cloud computing, and full-stack development. From building <strong className="font-semibold text-neutral-950 dark:text-white">GARUDA</strong>, a context-aware network defense platform, to exploring AI-powered social experiences with <strong className="font-semibold text-neutral-950 dark:text-white">VibeVerse</strong>, I'm drawn to problems that demand more than a standard solution. I care about how a system thinks, how it behaves in the real world, and how people experience using it.
             </p>
             <p className="text-base sm:text-lg md:text-xl font-normal leading-relaxed text-neutral-900 dark:text-neutral-200 transition-colors">
               I believe good engineering goes beyond making something work. It's about understanding the problem deeply, questioning familiar approaches, and paying attention to the details that make a product reliable, intuitive, and meaningful. I enjoy working across the entire process — from the first idea and system architecture to implementation, experimentation, and deployment.
@@ -79,7 +79,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
                 onClick={onOpenResume}
                 className="text-xs font-semibold px-4 py-2 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 hover:bg-black dark:hover:bg-neutral-100 transition-colors self-start sm:self-auto shadow-xs"
               >
-                Open Official Resume PDF ↗
+                View Resume ↗
               </button>
             )}
           </div>
@@ -94,9 +94,9 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
                 <div className="space-y-4">
                   <div>
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="font-bold text-base text-neutral-950 dark:text-white">
+                      <h3 className="font-bold text-base text-neutral-950 dark:text-white">
                         B.Tech – Computer Science and Engineering
-                      </h4>
+                      </h3>
                       <span className="text-xs font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-800/20 px-2 py-0.5 rounded-full shrink-0">
                         CGPA: 9.33/10.0
                       </span>
@@ -108,9 +108,9 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
 
                   <div className="pt-3 border-t border-neutral-300/60 dark:border-white/10">
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="font-bold text-sm text-neutral-950 dark:text-white">
+                      <h3 className="font-bold text-sm text-neutral-950 dark:text-white">
                         Higher Secondary Certification (HSC)
-                      </h4>
+                      </h3>
                       <span className="text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200 bg-neutral-300/80 dark:bg-neutral-800 px-2 py-0.5 rounded-full shrink-0">
                         Score: 90%
                       </span>
@@ -139,9 +139,9 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
                 <div className="space-y-4">
                   <div>
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="font-bold text-base text-neutral-950 dark:text-white">
+                      <h3 className="font-bold text-base text-neutral-950 dark:text-white">
                         IBM SkillsBuild – AI & Cloud Internship
-                      </h4>
+                      </h3>
                       <span className="text-[11px] font-mono text-neutral-500 dark:text-neutral-400 shrink-0">
                         Virtual, Jun – Jul 2026
                       </span>
@@ -153,9 +153,9 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
 
                   <div className="pt-3 border-t border-neutral-300/60 dark:border-white/10">
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="font-bold text-sm text-neutral-950 dark:text-white">
+                      <h3 className="font-bold text-sm text-neutral-950 dark:text-white">
                         ServiceNow University – Virtual Internship Program
-                      </h4>
+                      </h3>
                       <span className="text-[11px] font-mono text-neutral-500 dark:text-neutral-400 shrink-0">
                         Jun – Jul 2026
                       </span>
@@ -277,7 +277,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold text-neutral-950 dark:text-white mb-3 group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors flex items-center justify-between">
-                  <span>GARUDA-X</span>
+                  <span>GARUDA</span>
                   <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </h3>
                 <p className="text-base text-neutral-700 dark:text-neutral-300 leading-relaxed">
@@ -375,7 +375,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
             </div>
           </div>
         </section>
-      </main>
+      </div>
 
       {/* Infinite Marquee Ticker */}
       <section className="w-full overflow-hidden border-y border-neutral-300 dark:border-white/10 py-6 mb-16 select-none bg-neutral-200/50 dark:bg-[#0c0d12] transition-colors">

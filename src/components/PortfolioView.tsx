@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PROJECTS, Project, PERSONAL_INFO } from '../data/portfolioData.ts';
 import { filterProjects } from '../utils/portfolio.ts';
-import { ArrowUpRight, Github, ExternalLink, Activity, Shield, Sparkles, Terminal, Cpu, Database, Network, GitBranch, Layers, CheckCircle2, Camera, Upload, Trash2, Check, X } from 'lucide-react';
+import { ArrowUpRight, Github, ExternalLink, Activity, Shield, Sparkles, Terminal, Cpu, Database, Network, GitBranch, Layers, CheckCircle2 } from 'lucide-react';
 import { GitDiagramArchitecture } from './GitDiagramArchitecture.tsx';
 
 interface PortfolioViewProps {
@@ -14,8 +14,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
   const [activeTabMap, setActiveTabMap] = useState<Record<string, 'preview' | 'architecture'>>({});
   const [customProjectImages, setCustomProjectImages] = useState<Record<string, string>>({});
   const [customArchImages, setCustomArchImages] = useState<Record<string, string>>({});
-  const [editingImageProjectId, setEditingImageProjectId] = useState<string | null>(null);
-  const [imageUrlInput, setImageUrlInput] = useState<string>('');
 
   React.useEffect(() => {
     const images: Record<string, string> = {};
@@ -54,51 +52,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
       }
       return updated;
     });
-  };
-
-  const handleProjectImageUpload = (projectId: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setCustomProjectImages((prev) => ({ ...prev, [projectId]: base64 }));
-        try {
-          localStorage.setItem(`dhruva_project_image_${projectId}`, base64);
-        } catch {
-          // ignore
-        }
-        setEditingImageProjectId(null);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSaveProjectImageUrl = (projectId: string) => {
-    if (imageUrlInput.trim()) {
-      setCustomProjectImages((prev) => ({ ...prev, [projectId]: imageUrlInput.trim() }));
-      try {
-        localStorage.setItem(`dhruva_project_image_${projectId}`, imageUrlInput.trim());
-      } catch {
-        // ignore
-      }
-      setEditingImageProjectId(null);
-      setImageUrlInput('');
-    }
-  };
-
-  const handleRemoveProjectImage = (projectId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCustomProjectImages((prev) => {
-      const updated = { ...prev };
-      delete updated[projectId];
-      return updated;
-    });
-    try {
-      localStorage.removeItem(`dhruva_project_image_${projectId}`);
-    } catch {
-      // ignore
-    }
   };
 
   const filteredProjects = filterProjects(PROJECTS, selectedFilter);
@@ -636,7 +589,7 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
 
   return (
     <div className="w-full">
-      <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-24">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-24">
         {/* Hero Headline Section */}
         <section className="max-w-4xl mb-12 md:mb-16">
           <div className="flex items-center gap-2 mb-3">
@@ -715,32 +668,6 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
                 {/* Single clean picture / visual container */}
                 <div className="relative w-full rounded-[24px] overflow-hidden bg-neutral-900/10 dark:bg-black/40 p-2 sm:p-2.5 flex items-center justify-center transition-all group/media">
                   {renderProjectVisual(project)}
-
-                  {/* Quick Action to Replace Screenshot or Reset */}
-                  {currentTab === 'preview' && (
-                    <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 opacity-0 group-hover/media:opacity-100 transition-opacity">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setEditingImageProjectId(project.id);
-                        }}
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/75 hover:bg-black text-white text-[10px] font-mono backdrop-blur-md border border-white/20 transition-all shadow-md"
-                        title="Replace with custom project picture"
-                      >
-                        <Camera className="w-3 h-3 text-emerald-400" />
-                        <span>{customProjectImages[project.id] ? 'Change Pic' : 'Upload Pic'}</span>
-                      </button>
-                      {customProjectImages[project.id] && (
-                        <button
-                          onClick={(e) => handleRemoveProjectImage(project.id, e)}
-                          className="p-1 rounded-full bg-rose-950/80 hover:bg-rose-900 text-rose-300 text-[10px] backdrop-blur-md border border-rose-800/40 transition-all"
-                          title="Reset to default bespoke UI render"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      )}
-                    </div>
-                  )}
                 </div>
 
                 {/* Title, Category & Description Bar */}
@@ -763,6 +690,18 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
                     <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 mt-2.5 leading-relaxed">
                       {project.description}
                     </p>
+
+                    {/* Recruiter Key Tech Stack Badges */}
+                    <div className="flex flex-wrap gap-1.5 mt-3.5 pt-1">
+                      {project.techStack?.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-medium bg-neutral-300/70 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-black/5 dark:border-white/10"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Footer action bar */}
@@ -786,133 +725,47 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
             );
           })}
         </section>
-      </main>
+      </div>
 
       {/* Footer */}
       <footer className="w-full border-t border-neutral-300/80 pt-16 pb-16 px-4 sm:px-8 lg:px-12 max-w-[1400px] mx-auto text-[15px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <span className="text-xs text-neutral-500 block mb-1">Email</span>
-            <a href={`mailto:${PERSONAL_INFO.email}`} className="text-base font-semibold text-neutral-900 hover:underline">
+            <a href={`mailto:${PERSONAL_INFO.email}`} className="text-base font-semibold text-neutral-900 dark:text-white hover:underline">
               {PERSONAL_INFO.email}
             </a>
           </div>
           <div>
             <span className="text-xs text-neutral-500 block mb-1">Phone</span>
-            <a href={`tel:${PERSONAL_INFO.phone}`} className="text-base font-semibold text-neutral-900 hover:underline">
+            <a href={`tel:${PERSONAL_INFO.phone}`} className="text-base font-semibold text-neutral-900 dark:text-white hover:underline">
               {PERSONAL_INFO.formattedPhone}
             </a>
           </div>
           <div>
             <span className="text-xs text-neutral-500 block mb-1">GitHub</span>
-            <a href={PERSONAL_INFO.githubUrl} target="_blank" rel="noopener noreferrer" className="text-base font-semibold text-neutral-900 hover:underline">
+            <a href={PERSONAL_INFO.githubUrl} target="_blank" rel="noopener noreferrer" className="text-base font-semibold text-neutral-900 dark:text-white hover:underline">
               github.com/DHRUVASAI
             </a>
           </div>
           <div>
             <span className="text-xs text-neutral-500 block mb-1">LinkedIn</span>
-            <a href={PERSONAL_INFO.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-base font-semibold text-neutral-900 hover:underline">
+            <a href={PERSONAL_INFO.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-base font-semibold text-neutral-900 dark:text-white hover:underline">
               linkedin.com/in/vudatha-dhruva-sai
             </a>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-10 mt-10 border-t border-neutral-300/60 text-xs text-neutral-500">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-10 mt-10 border-t border-neutral-300/60 dark:border-white/10 text-xs text-neutral-500 dark:text-neutral-400">
           <div>© 2026 Dhruva Sai. Hyderabad, India.</div>
           <button
             onClick={() => onNavigate('contact')}
-            className="text-neutral-900 font-semibold hover:underline"
+            className="text-neutral-900 dark:text-white font-semibold hover:underline"
           >
             Start a project together →
           </button>
         </div>
       </footer>
-
-      {/* Modal to Upload or Paste Project Screenshot */}
-      {editingImageProjectId && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
-          onClick={() => {
-            setEditingImageProjectId(null);
-            setImageUrlInput('');
-          }}
-        >
-          <div
-            className="bg-[#121318] border border-neutral-800 rounded-3xl w-full max-w-md p-6 text-white shadow-2xl relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4 border-b border-neutral-800 pb-3">
-              <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400">
-                  Project Screenshot Replacement
-                </span>
-                <h4 className="font-bold text-base text-white">
-                  {PROJECTS.find((p) => p.id === editingImageProjectId)?.title}
-                </h4>
-              </div>
-              <button
-                onClick={() => {
-                  setEditingImageProjectId(null);
-                  setImageUrlInput('');
-                }}
-                className="w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 flex items-center justify-center text-neutral-300"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {/* Option A: Upload local image */}
-              <div>
-                <label className="text-xs font-semibold text-neutral-300 block mb-1.5">
-                  1. Upload Screenshot File
-                </label>
-                <label className="flex flex-col items-center justify-center border-2 border-dashed border-neutral-700 hover:border-neutral-500 rounded-2xl p-5 cursor-pointer bg-neutral-900/60 hover:bg-neutral-900 transition-colors">
-                  <Upload className="w-6 h-6 text-neutral-400 mb-1" />
-                  <span className="text-xs text-neutral-200 font-medium">Click to browse file (PNG, JPG, WebP)</span>
-                  <span className="text-[10px] text-neutral-500 mt-1">Replaces the visual card with your project screenshot</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleProjectImageUpload(editingImageProjectId, e)}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-
-              <div className="flex items-center gap-2 text-xs text-neutral-500 justify-center">
-                <span className="h-px bg-neutral-800 flex-1"></span>
-                <span>OR</span>
-                <span className="h-px bg-neutral-800 flex-1"></span>
-              </div>
-
-              {/* Option B: Direct Image URL */}
-              <div>
-                <label className="text-xs font-semibold text-neutral-300 block mb-1.5">
-                  2. Paste Hosted Image URL
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="url"
-                    placeholder="https://..."
-                    value={imageUrlInput}
-                    onChange={(e) => setImageUrlInput(e.target.value)}
-                    className="flex-1 bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-hidden focus:border-indigo-500 font-mono"
-                  />
-                  <button
-                    onClick={() => handleSaveProjectImageUrl(editingImageProjectId)}
-                    disabled={!imageUrlInput.trim()}
-                    className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1"
-                  >
-                    <Check className="w-3.5 h-3.5" />
-                    <span>Save</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

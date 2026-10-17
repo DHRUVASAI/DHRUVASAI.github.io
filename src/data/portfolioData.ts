@@ -7,6 +7,7 @@ export interface Project {
   description: string;
   githubUrl: string;
   tags: string[];
+  techStack: string[];
   metrics: string;
   features: string[];
   architectureSummary: string;
@@ -39,7 +40,7 @@ export const PERSONAL_INFO = {
   resumeSummary: 'Computer Science undergraduate with hands-on experience building AI-powered systems and cloud-based applications. Developed JanSahayak, a multilingual voice-enabled welfare assistant recognized in the AWS AI for Bharat Hackathon. Passionate about AI, cloud computing, cybersecurity, and building technology that solves real-world problems.',
   aboutBio: [
     "I'm Dhruva Sai — a computer science student and builder fascinated by the space where artificial intelligence, engineering, and thoughtful product design meet. I enjoy taking complex ideas and turning them into systems that are not only technically interesting, but genuinely useful.",
-    "My work spans AI/ML, agentic systems, cybersecurity, cloud computing, and full-stack development. From building GARUDA-X, a context-aware network defense platform, to exploring AI-powered social experiences with VibeVerse, I'm drawn to problems that demand more than a standard solution. I care about how a system thinks, how it behaves in the real world, and how people experience using it.",
+    "My work spans AI/ML, agentic systems, cybersecurity, cloud computing, and full-stack development. From building GARUDA, a context-aware network defense platform, to exploring AI-powered social experiences with VibeVerse, I'm drawn to problems that demand more than a standard solution. I care about how a system thinks, how it behaves in the real world, and how people experience using it.",
     "I believe good engineering goes beyond making something work. It's about understanding the problem deeply, questioning familiar approaches, and paying attention to the details that make a product reliable, intuitive, and meaningful. I enjoy working across the entire process — from the first idea and system architecture to implementation, experimentation, and deployment.",
     "I'm continuously exploring new technologies, building ambitious projects, and learning by shipping. My goal is simple: to create things that solve real problems, challenge conventional thinking, and make technology feel a little more powerful and human."
   ],
@@ -144,6 +145,7 @@ export const PROJECTS: Project[] = [
     description: 'An AI-powered cricket intelligence platform that transforms ball-by-ball delivery data into player insights, match predictions, tactical recommendations, and interactive analytics.',
     githubUrl: 'https://github.com/DHRUVASAI/EDGE---Evidence-Driven-Game-Engine',
     tags: ['Cricket Analytics', 'Predictive Modeling', 'Ball-by-Ball Data', 'Data Science', 'Python'],
+    techStack: ['Python', 'DuckDB', 'Pandas', 'Monte Carlo Engine', 'Streamlit'],
     metrics: '14,729 Matches Analyzed · 9.5M+ Granular Deliveries Indexed',
     features: [
       'Ingests 9,569,669 ball-by-ball delivery events with Realtime Indexing across T20, ODI, and Test cricket',
@@ -169,11 +171,12 @@ export const PROJECTS: Project[] = [
     number: '02',
     title: 'VibeVerse',
     subtitle: 'Mood-Driven Media Discovery & Digital Identity',
-    category: 'AI · Web3 · Consumer Applications',
+    category: 'AI · Recommendation Systems · Full-Stack',
     type: 'Full-Stack',
     description: 'An intelligent entertainment platform that combines mood-based movie and music discovery with personalized recommendations and interactive experiences.',
     githubUrl: 'https://github.com/DHRUVASAI/VibeVerse-master',
-    tags: ['Mood-Based AI', 'Recommendation Engine', 'Cinema Discovery', 'Consumer App', 'Web3'],
+    tags: ['Mood-Based AI', 'Recommendation Engine', 'Cinema Discovery', 'Consumer App', 'Vector Search'],
+    techStack: ['React.js', 'Node.js', 'Sentence-Transformers', 'ChromaDB', 'TMDb API'],
     metrics: '8 Emotional Vectors · Multi-Modal Mood Discovery Engine',
     features: [
       'Interactive "How Are You Feeling Today?" natural language mood prompt with neural semantic matching',
@@ -202,6 +205,7 @@ export const PROJECTS: Project[] = [
     description: 'A context-aware network defense platform that discovers connected devices, assesses network security, and analyzes suspicious activity to generate actionable threat intelligence.',
     githubUrl: 'https://github.com/DHRUVASAI/GARUDA-',
     tags: ['Cybersecurity', 'Network Defense', 'Packet Telemetry', 'Zero-Trust SOC', 'Python'],
+    techStack: ['Python', 'Flask', 'Scapy Sniffer', 'Raw Sockets', 'WebGL SOC HUD'],
     metrics: '254 Addresses Scanned in 1.3s · Sub-50ms Threat Telemetry',
     features: [
       'Automated Subnet Scanning (254 addresses scanned in 1.3 seconds across 9 active nodes)',
@@ -231,6 +235,7 @@ export const PROJECTS: Project[] = [
     description: 'An AI-powered engineering assistant that analyzes project ideas, designs system architectures, evaluates technology choices, and generates structured development playbooks.',
     githubUrl: 'https://github.com/DHRUVASAI/teamforge-ai',
     tags: ['Agentic AI', 'Software Engineering', 'NVIDIA Nemotron', 'System Architecture', 'LLMs'],
+    techStack: ['NVIDIA Nemotron', 'LangChain', 'Docker', 'Multi-Agent Swarm', 'FastAPI'],
     metrics: 'NVIDIA Nemotron Engine · Autonomous Codebase Scaffolding',
     features: [
       'Powered by NVIDIA Nemotron for deep contextual understanding of enterprise codebases',
@@ -255,11 +260,12 @@ export const PROJECTS: Project[] = [
     number: '05',
     title: 'QuickPitch AI v2.5',
     subtitle: 'Executive-Grade Presentation Deck Synthesizer',
-    category: 'Generative AI · Web3 · Developer Tools',
+    category: 'Generative AI · GPU Acceleration · Developer Tools',
     type: 'Generative AI',
-    description: 'An AI-powered presentation generator that transforms videos, audio, and transcripts into PowerPoint decks, exploring pay-per-use monetization through blockchain-based micropayments.',
+    description: 'An AI-powered presentation generator that transforms videos, audio, and transcripts into PowerPoint decks with local offline acceleration.',
     githubUrl: 'https://github.com/DHRUVASAI/QuickPitch-AI-PPT-Generator',
     tags: ['Generative AI', 'Video-to-Deck', 'Local RTX 4060', 'Native .pptx', 'Developer Tools'],
+    techStack: ['Python', 'Whisper Large-v3', 'PyTorch / CUDA', 'PyAnnote', 'python-pptx'],
     metrics: '3.3s Latency · Local RTX 4060 Offline AI Acceleration',
     features: [
       'Converts YouTube videos, audio lectures, and technical docs into executive slide decks',
@@ -288,6 +294,7 @@ export const PROJECTS: Project[] = [
     description: 'A multilingual AI assistant designed to simplify access to government welfare schemes through conversational guidance, document processing, and assisted application workflows.',
     githubUrl: 'https://github.com/DHRUVASAI/JanSahayak-',
     tags: ['Telegram Bot', 'Aadhaar OCR', 'AWS Serverless', 'RPA Automation', 'Social Impact'],
+    techStack: ['Python', 'AWS Serverless', 'AWS Textract', 'Bhashini AI', 'Headless RPA'],
     metrics: '6-Step Telegram Bot Workflow · Automated State Portal RPA Filing',
     features: [
       'Live Telegram Bot assistant supporting Indic vernaculars (Telugu, Hindi, English, Tamil, Marathi, Bangla)',

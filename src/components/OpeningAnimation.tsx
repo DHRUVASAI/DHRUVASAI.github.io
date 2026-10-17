@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Volume2, VolumeX, Sparkles, Bot } from 'lucide-react';
+import { ArrowRight, Sparkles, Bot, Volume2 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData.ts';
 
 interface OpeningAnimationProps {
@@ -22,6 +22,15 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     }
   }, [soundEnabled]);
 
+  const handleUnmute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.play().catch(() => {});
+      setSoundEnabled(true);
+      setAudioBlocked(false);
+    }
+  };
+
   const handleProceed = () => {
     if (hasTriggeredProceed.current) return;
     hasTriggeredProceed.current = true;
@@ -31,7 +40,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     }, 600);
   };
 
-  // Video Autoplay & Audio Initialization
+  // Video Autoplay & Audio Initialization (Default Sound ON)
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -39,7 +48,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     let isMounted = true;
 
     const startPlayback = async () => {
-      // 1. Try unmuted playback (sound ON by default)
+      // 1. Unmuted playback by default
       video.muted = false;
       try {
         await video.play();
@@ -48,15 +57,12 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
           setAudioBlocked(false);
         }
       } catch (err) {
-        // 2. If browser autoplay policy blocks unmuted audio on initial visit,
-        // play muted so video animates immediately, and allow 1-tap unmute
-        console.warn('Browser blocked unmuted autoplay, playing muted until interaction:', err);
+        // 2. If browser requires user interaction first, play video smoothly and prepare 1-tap unmute
         if (isMounted && videoRef.current) {
           videoRef.current.muted = true;
           try {
             await videoRef.current.play();
           } catch {}
-          setSoundEnabled(false);
           setAudioBlocked(true);
         }
       }
@@ -64,14 +70,13 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
 
     startPlayback();
 
-    // 3. User interaction listener: immediately unmutes on first touch/click/key
+    // 3. User interaction listener: automatically unmutes on first touch/click/key
     const handleFirstUserInteraction = () => {
       if (hasUnmutedOnce.current) return;
       hasUnmutedOnce.current = true;
 
       if (videoRef.current) {
         videoRef.current.muted = false;
-        // Rewind to 0 if unmuted in the first 4 seconds so the full voice greeting is heard
         if (videoRef.current.currentTime > 0.6 && videoRef.current.currentTime < 4.8) {
           videoRef.current.currentTime = 0;
         }
@@ -116,11 +121,9 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
       let calculatedPct = 0;
 
       if (video && video.duration && !isNaN(video.duration) && video.currentTime > 0) {
-        // Active video: normalize progress to Dhruva's greeting completion (~5.4s)
         const effectiveDuration = Math.min(video.duration, 5.5);
         calculatedPct = Math.min(100, Math.round((video.currentTime / effectiveDuration) * 100));
       } else {
-        // Fallback timer if video is still buffering
         const elapsed = performance.now() - startTime;
         calculatedPct = Math.min(100, Math.round((elapsed / targetDurationMs) * 100));
       }
@@ -140,18 +143,13 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     return () => clearInterval(interval);
   }, []);
 
-  const toggleSound = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    const next = !soundEnabled;
-    setSoundEnabled(next);
+  const triggerUnmute = () => {
+    setSoundEnabled(true);
     setAudioBlocked(false);
     hasUnmutedOnce.current = true;
-
     if (videoRef.current) {
-      videoRef.current.muted = !next;
-      if (next) {
-        videoRef.current.play().catch(() => {});
-      }
+      videoRef.current.muted = false;
+      videoRef.current.play().catch(() => {});
     }
   };
 
@@ -177,10 +175,10 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     <div
       onClick={() => {
         if (audioBlocked) {
-          toggleSound();
+          triggerUnmute();
         }
       }}
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-between bg-[#07080D] text-white select-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto px-4 py-4 sm:py-6 cursor-pointer ${
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-between bg-[#07080D] text-white select-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto px-4 py-3 sm:py-6 cursor-pointer ${
         isFadingOut ? 'opacity-0 scale-105 blur-[3px] pointer-events-none' : 'opacity-100 scale-100 blur-0'
       }`}
     >
@@ -198,45 +196,26 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[500px] h-[340px] sm:h-[500px] bg-gradient-to-tr from-emerald-600/15 via-indigo-600/20 to-purple-600/15 rounded-full blur-[90px] sm:blur-[130px] animate-pulse"></div>
       </div>
 
-      {/* Top Bar Controls (Sound & Skip) - Always visible & pinned */}
-      <header className="w-full max-w-4xl flex items-center justify-end gap-2 z-30 pointer-events-auto shrink-0 mb-1">
-        <button
-          onClick={toggleSound}
-          className={`min-h-[38px] text-[11px] sm:text-xs font-mono px-3.5 py-1.5 rounded-full border backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer shadow-lg ${
-            soundEnabled
-              ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20'
-              : 'border-amber-400/50 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 animate-pulse'
-          }`}
-          title={soundEnabled ? 'Mute audio' : 'Turn sound on'}
-        >
-          {soundEnabled ? (
-            <>
-              <Volume2 className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-              <span>Audio On</span>
-            </>
-          ) : (
-            <>
-              <VolumeX className="w-3.5 h-3.5 text-amber-400" />
-              <span className="font-semibold">Tap for Sound 🔊</span>
-            </>
-          )}
-        </button>
-
+      {/* Top Bar Skip Button - Always visible, clean without duplicate mute toggles */}
+      <header className="w-full max-w-4xl flex items-center justify-end z-30 pointer-events-auto shrink-0 pt-1 pb-1">
         <button
           onClick={(e) => {
             e.stopPropagation();
             handleProceed();
           }}
-          className="min-h-[38px] text-[11px] sm:text-xs font-mono text-neutral-400 hover:text-white px-3.5 py-1.5 rounded-full border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all cursor-pointer flex items-center gap-1 shadow-lg"
+          className="min-h-[38px] text-[11px] sm:text-xs font-mono text-neutral-300 hover:text-white px-4 py-1.5 rounded-full border border-white/15 hover:border-white/35 bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all cursor-pointer flex items-center gap-1.5 shadow-lg"
           title="Skip intro (or press Esc/Space)"
         >
           <span>Skip</span>
-          <span className="text-neutral-500 text-[10px]">➔</span>
+          <span className="text-neutral-400 text-[11px]">➔</span>
         </button>
       </header>
 
-      {/* Main Presentation Container - Vertically Centered & Proportionally Balanced */}
-      <main className="relative z-10 flex flex-col items-center max-w-md w-full text-center my-auto py-1 pointer-events-auto shrink-0">
+      {/* Presentation Container - Guaranteed No Cut-Off on top or bottom */}
+      <section
+        aria-label="Welcome presentation"
+        className="relative z-10 flex flex-col items-center max-w-md w-full text-center py-2 sm:py-4 pointer-events-auto shrink-0 my-auto"
+      >
         
         {/* Hero Video Card featuring Dhruva's Real Animation */}
         <div className="relative group mb-2.5 sm:mb-3">
@@ -259,7 +238,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
             {/* Floating Audio Tap Banner if browser blocked unmuted autoplay */}
             {audioBlocked && (
               <div
-                onClick={toggleSound}
+                onClick={handleUnmute}
                 className="absolute inset-x-2.5 bottom-2.5 z-30 py-1.5 px-2.5 rounded-xl bg-neutral-900/95 text-white backdrop-blur-md border border-amber-400/60 shadow-2xl flex items-center justify-center gap-1.5 cursor-pointer hover:bg-neutral-900 transition-colors animate-bounce"
               >
                 <Volume2 className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
@@ -350,7 +329,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
             <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
           </button>
         </div>
-      </main>
+      </section>
 
       {/* Bottom Hint Footer - Always visible & pinned */}
       <footer className="w-full text-center z-20 pointer-events-none shrink-0 mt-1">

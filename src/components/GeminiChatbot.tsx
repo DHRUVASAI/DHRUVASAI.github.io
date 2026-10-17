@@ -35,6 +35,50 @@ const SUGGESTED_PROMPTS = [
   'How does TeamForge.AI coordinate the Nemotron agent swarm?'
 ];
 
+const renderInlineMarkdown = (text: string): React.ReactNode => {
+  // Regex splitting on code, bold-italic, bold, italic
+  const tokenRegex = /(`[^`]+`|\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  const parts = text.split(tokenRegex);
+
+  return parts.map((part, i) => {
+    if (!part) return null;
+    if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
+      return (
+        <code
+          key={i}
+          className="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 font-mono text-[11px] text-indigo-600 dark:text-indigo-400"
+        >
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    if (part.startsWith('***') && part.endsWith('***') && part.length > 6) {
+      return (
+        <strong key={i} className="font-semibold italic">
+          {part.slice(3, -3)}
+        </strong>
+      );
+    }
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+      return (
+        <strong key={i} className="font-semibold text-neutral-950 dark:text-white">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+      return (
+        <em key={i} className="italic text-neutral-800 dark:text-neutral-200">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    // Clean any stray triple asterisks that were left unclosed
+    const cleanedText = part.replace(/\*\*\*/g, '');
+    return <span key={i}>{cleanedText}</span>;
+  });
+};
+
 const renderFormattedContent = (content: string) => {
   // Split on code blocks ```lang ... ```
   const parts = content.split(/(```[\s\S]*?```)/g);
@@ -59,9 +103,28 @@ const renderFormattedContent = (content: string) => {
       );
     }
 
+    const lines = part.split('\n');
     return (
       <span key={index} className="break-words [overflow-wrap:anywhere]">
-        {part}
+        {lines.map((line, lineIdx) => {
+          const trimmed = line.trimStart();
+          const isBullet = trimmed.startsWith('- ') || trimmed.startsWith('* ');
+          const bulletContent = isBullet ? trimmed.slice(2) : line;
+
+          return (
+            <React.Fragment key={lineIdx}>
+              {lineIdx > 0 && <br />}
+              {isBullet ? (
+                <span className="inline-flex items-start gap-1.5 pl-1 my-0.5">
+                  <span className="text-indigo-500 font-bold leading-tight">•</span>
+                  <span>{renderInlineMarkdown(bulletContent)}</span>
+                </span>
+              ) : (
+                renderInlineMarkdown(bulletContent)
+              )}
+            </React.Fragment>
+          );
+        })}
       </span>
     );
   });
@@ -81,13 +144,13 @@ I know all about Dhruva's flagship engineering projects (*EDGE, GARUDA, TeamForg
 
 Ask me anything about Dhruva's technical systems, architecture blueprints, or background!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        modelUsed: 'gemini-3.8-flash'
+        modelUsed: 'gemini-2.5-flash'
       }
     ];
   });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<'gemini-3.8-flash' | 'gemini-3.1-flash-lite' | 'gemini-4-argon'>('gemini-3.8-flash');
+  const [selectedModel, setSelectedModel] = useState<'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-1.5-pro'>('gemini-2.5-flash');
   const [showModelPicker, setShowModelPicker] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -226,9 +289,9 @@ Ask me anything about Dhruva's technical systems, architecture blueprints, or ba
                 >
                   <Cpu className="w-3 h-3 text-indigo-500" />
                   <span className="hidden sm:inline">
-                    {selectedModel === 'gemini-3.8-flash' && '3.8 Flash'}
-                    {selectedModel === 'gemini-3.1-flash-lite' && '3.1 Lite'}
-                    {selectedModel === 'gemini-4-argon' && '4 Argon'}
+                    {selectedModel === 'gemini-2.5-flash' && '2.5 Flash'}
+                    {selectedModel === 'gemini-2.0-flash' && '2.0 Flash'}
+                    {selectedModel === 'gemini-1.5-pro' && '1.5 Pro'}
                   </span>
                   <ChevronDown className="w-3 h-3 opacity-60" />
                 </button>
@@ -240,56 +303,56 @@ Ask me anything about Dhruva's technical systems, architecture blueprints, or ba
                     </div>
                     <button
                       onClick={() => {
-                        setSelectedModel('gemini-3.8-flash');
+                        setSelectedModel('gemini-2.5-flash');
                         setShowModelPicker(false);
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between ${
-                        selectedModel === 'gemini-3.8-flash'
+                        selectedModel === 'gemini-2.5-flash'
                           ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold'
                           : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                       }`}
                     >
                       <div>
-                        <div>gemini-3.8-flash</div>
-                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Recommended · General</div>
+                        <div>Gemini 2.5 Flash</div>
+                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Recommended · Fast & Multimodal</div>
                       </div>
-                      {selectedModel === 'gemini-3.8-flash' && <Check className="w-3.5 h-3.5" />}
+                      {selectedModel === 'gemini-2.5-flash' && <Check className="w-3.5 h-3.5" />}
                     </button>
 
                     <button
                       onClick={() => {
-                        setSelectedModel('gemini-3.1-flash-lite');
+                        setSelectedModel('gemini-2.0-flash');
                         setShowModelPicker(false);
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between mt-1 ${
-                        selectedModel === 'gemini-3.1-flash-lite'
+                        selectedModel === 'gemini-2.0-flash'
                           ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold'
                           : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                       }`}
                     >
                       <div>
-                        <div>gemini-3.1-flash-lite</div>
-                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Fast response latency</div>
+                        <div>Gemini 2.0 Flash</div>
+                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Real-time · Low Latency</div>
                       </div>
-                      {selectedModel === 'gemini-3.1-flash-lite' && <Check className="w-3.5 h-3.5" />}
+                      {selectedModel === 'gemini-2.0-flash' && <Check className="w-3.5 h-3.5" />}
                     </button>
 
                     <button
                       onClick={() => {
-                        setSelectedModel('gemini-4-argon');
+                        setSelectedModel('gemini-1.5-pro');
                         setShowModelPicker(false);
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between mt-1 ${
-                        selectedModel === 'gemini-4-argon'
+                        selectedModel === 'gemini-1.5-pro'
                           ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold'
                           : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                       }`}
                     >
                       <div>
-                        <div>gemini-4-argon</div>
-                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Complex architecture math</div>
+                        <div>Gemini 1.5 Pro</div>
+                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Deep Technical Reasoning</div>
                       </div>
-                      {selectedModel === 'gemini-4-argon' && <Check className="w-3.5 h-3.5" />}
+                      {selectedModel === 'gemini-1.5-pro' && <Check className="w-3.5 h-3.5" />}
                     </button>
                   </div>
                 )}

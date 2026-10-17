@@ -3,6 +3,14 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+  :root.dark,
+  [data-theme="dark"] {
+    color-scheme: dark;
+  }
+
   body {
     background-color: #ECECEB;
     color: #111111;
@@ -12,7 +20,9 @@
     transition: background-color 0.25s ease, color 0.25s ease;
   }
 
+  html.dark,
   html.dark body,
+  body.dark,
   .dark body,
   .dark {
     background-color: #090A0E;
