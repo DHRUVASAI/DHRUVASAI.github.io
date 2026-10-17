@@ -105,7 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {onPlayOpening && (
             <button
               onClick={onPlayOpening}
-              className="p-1 sm:p-2 rounded-full bg-white/70 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 border border-black/5 dark:border-white/10 text-neutral-800 dark:text-neutral-200 transition-all shadow-xs cursor-pointer group"
+              className="p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-white/70 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 border border-black/5 dark:border-white/10 text-neutral-800 dark:text-neutral-200 transition-all shadow-xs cursor-pointer group"
               title="Replay Welcome Intro"
               aria-label="Replay Welcome Intro"
             >
@@ -116,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Night Mode Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="p-1 sm:p-2 rounded-full bg-white/70 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 border border-black/5 dark:border-white/10 text-neutral-800 dark:text-neutral-200 transition-all shadow-xs cursor-pointer"
+            className="p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-white/70 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 border border-black/5 dark:border-white/10 text-neutral-800 dark:text-neutral-200 transition-all shadow-xs cursor-pointer"
             title={theme === 'dark' ? 'Switch to Daylight Mode' : 'Switch to Night Mode'}
             aria-label="Toggle Night Mode"
           >

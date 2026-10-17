@@ -2,16 +2,75 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>Dhruva Sai — AI Engineer & Product Builder</title>
     <meta name="description" content="Portfolio of Dhruva Sai — Computer science student and builder in Hyderabad, India exploring AI, agentic systems, cybersecurity, and full-stack engineering." />
+    <meta name="keywords" content="Dhruva Sai, Vudatha Dhruva Sai, AI Engineer, Agentic Systems, Machine Learning, Full-Stack Developer, Hyderabad, Portfolio" />
+    <meta name="author" content="Vudatha Dhruva Sai" />
+    <link rel="canonical" href="https://vudatha-dhruva-sai.me/" />
+
+    <!-- Mobile & PWA Optimization -->
+    <meta name="theme-color" content="#ECECEB" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#07080D" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Dhruva Sai" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/png" href="/dhruva-portrait.png" />
+    <link rel="apple-touch-icon" href="/dhruva-portrait.png" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vudatha-dhruva-sai.me/" />
     <meta property="og:title" content="Dhruva Sai — AI Engineer & Product Builder" />
     <meta property="og:description" content="Exploring what should exist next. Portfolio of AI systems, cybersecurity platforms, and engineering products." />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://vudatha-dhruva-sai.me/dhruva-portrait.png" />
+
+    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dhruva Sai — AI Engineer & Product Builder" />
+    <meta name="twitter:description" content="Exploring what should exist next. Portfolio of AI systems, cybersecurity platforms, and engineering products." />
+    <meta name="twitter:image" content="https://vudatha-dhruva-sai.me/dhruva-portrait.png" />
+
+    <!-- Performance & CDN Preconnects -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+    <!-- Structured Data (JSON-LD) for Search Engines & Mobile Rich Cards -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Vudatha Dhruva Sai",
+      "alternateName": "Dhruva Sai",
+      "url": "https://vudatha-dhruva-sai.me/",
+      "image": "https://vudatha-dhruva-sai.me/dhruva-portrait.png",
+      "jobTitle": "AI Systems Engineer & Full-Stack Developer",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "KLEF"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Koneru Lakshmaiah Education Foundation"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hyderabad",
+        "addressCountry": "India"
+      },
+      "sameAs": [
+        "https://github.com/DHRUVASAI",
+        "https://linkedin.com/in/dhruva-sai"
+      ]
+    }
+    </script>
   </head>
   <body class="bg-[#ECECEB] text-[#111111] antialiased selection:bg-neutral-900 selection:text-neutral-100 min-h-screen">
     <!-- Netlify Native Form Detection -->
@@ -24,6 +83,25 @@
       <input type="text" name="budget" />
       <textarea name="details"></textarea>
     </form>
+
+    <!-- Bot / Crawler Fallback for Mobile Accessibility & SEO indexation -->
+    <noscript>
+      <div style="padding: 24px; font-family: sans-serif; max-width: 800px; margin: 0 auto;">
+        <h1>Vudatha Dhruva Sai — AI Systems Engineer &amp; Full-Stack Developer</h1>
+        <p>Computer science student and builder in Hyderabad, India exploring AI, agentic systems, cybersecurity, and full-stack engineering.</p>
+        <h2>Flagship Engineering Projects</h2>
+        <ul>
+          <li><strong>JanSahayak</strong>: Multilingual Public Welfare Assistant &amp; RPA Form Automation (AWS Serverless, Bhashini STT, OCR).</li>
+          <li><strong>GARUDA</strong>: Network Security Analysis Platform (1.3s subnet scanning, Scapy sniffer, anomaly scoring).</li>
+          <li><strong>TeamForge.AI</strong>: Multi-agent software engineering squad powered by NVIDIA Nemotron.</li>
+          <li><strong>EDGE</strong>: Evidence-Driven Game Engine indexing 9.5M cricket deliveries via DuckDB.</li>
+          <li><strong>QuickPitch AI v2.5</strong>: Video-to-PowerPoint executive deck generator with RTX 4060 GPU acceleration.</li>
+          <li><strong>VibeVerse</strong>: Mood-driven media discovery engine with 3D VAD emotional vector embeddings.</li>
+        </ul>
+        <h2>Contact</h2>
+        <p>Email: dhruvasai1706@gmail.com | Phone: +91 9347879796 | Location: Hyderabad, India</p>
+      </div>
+    </noscript>
 
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

@@ -196,7 +196,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
       <div className="absolute top-3 right-3 sm:top-5 sm:right-6 flex items-center gap-2 z-30 pointer-events-auto">
         <button
           onClick={toggleSound}
-          className={`text-[11px] sm:text-xs font-mono px-3 py-1.5 rounded-full border backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer shadow-lg ${
+          className={`min-h-[40px] text-[11px] sm:text-xs font-mono px-3.5 py-1.5 rounded-full border backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer shadow-lg ${
             soundEnabled
               ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20'
               : 'border-white/10 bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10 animate-pulse'
@@ -221,7 +221,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
             e.stopPropagation();
             handleProceed();
           }}
-          className="text-[11px] sm:text-xs font-mono text-neutral-400 hover:text-white px-3 py-1.5 rounded-full border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all cursor-pointer flex items-center gap-1 shadow-lg"
+          className="min-h-[40px] text-[11px] sm:text-xs font-mono text-neutral-400 hover:text-white px-3.5 py-1.5 rounded-full border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all cursor-pointer flex items-center gap-1 shadow-lg"
           title="Skip intro (or press Esc/Space)"
         >
           <span>Skip</span>
@@ -378,10 +378,10 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
               e.stopPropagation();
               handleProceed();
             }}
-            className="group px-5 sm:px-6 py-2 sm:py-2.5 rounded-full bg-white hover:bg-neutral-100 text-neutral-950 font-bold text-[11px] sm:text-xs tracking-wider uppercase shadow-xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            className="group min-h-[44px] px-6 py-2.5 rounded-full bg-white hover:bg-neutral-100 text-neutral-950 font-bold text-xs tracking-wider uppercase shadow-xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer"
           >
             <span>Enter Portfolio</span>
-            <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
           </button>
         </div>
 

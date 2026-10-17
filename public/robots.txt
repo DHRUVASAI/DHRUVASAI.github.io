@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vudatha-dhruva-sai.me/sitemap.xml
