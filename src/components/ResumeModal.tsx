@@ -58,8 +58,8 @@ EXPERIENCE
 IBM SkillsBuild – AI & Cloud Internship | Virtual, Jun 2026 – Jul 2026
 • Completed hands-on training in AI and Cloud Computing; built an AI-based project applying machine learning and cloud concepts through mentor-guided sessions.
 
-ServiceNow University – Virtual Internship Program | Jun 2026 – Jul 2026
-• Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases.
+SmartBridge + AICTE · ServiceNow University Virtual Internship Program (FY26 Cohort 5) | Virtual, 10 Jun 2026 – 6 Jul 2026
+• Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases. Grand assessment completed on 3 Jul 2026.
 
 ACHIEVEMENTS
 • Shortlisted for AI for Bharat Hackathon by AWS and awarded an official AWS badge for building JanSahayak.
@@ -381,14 +381,14 @@ CERTIFICATIONS
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-0.5">
                     <div className="font-bold text-neutral-950">
-                      ServiceNow University – Virtual Internship Program
+                      SmartBridge + AICTE · ServiceNow University Virtual Internship Program (FY26 Cohort 5)
                     </div>
                     <div className="italic text-neutral-700 sm:text-right font-serif">
-                      Jun 2026 – Jul 2026
+                      10 Jun 2026 – 6 Jul 2026
                     </div>
                   </div>
                   <ul className="mt-1 space-y-0.5 list-disc list-outside ml-4 text-neutral-800 leading-relaxed">
-                    <li>Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases.</li>
+                    <li>Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases. Grand assessment completed on 3 Jul 2026.</li>
                   </ul>
                 </div>
               </div>

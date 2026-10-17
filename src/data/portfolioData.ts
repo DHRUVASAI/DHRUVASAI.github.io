@@ -77,11 +77,11 @@ export const PERSONAL_INFO = {
       ]
     },
     {
-      role: 'ServiceNow University – Virtual Internship Program',
+      role: 'SmartBridge + AICTE · ServiceNow University Virtual Internship Program (FY26 Cohort 5)',
       location: 'Virtual',
-      period: 'Jun 2026 – Jul 2026',
+      period: '10 Jun 2026 – 6 Jul 2026',
       bullets: [
-        'Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases.'
+        'Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases. Grand assessment completed on 3 Jul 2026.'
       ]
     }
   ],

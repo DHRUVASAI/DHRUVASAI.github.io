@@ -137,7 +137,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="View Dhruva's resume"
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>Resume</span>
+              <span>View Resume</span>
             </button>
           )}
 

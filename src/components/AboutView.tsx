@@ -153,15 +153,15 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
 
                   <div className="pt-3 border-t border-neutral-300/60 dark:border-white/10">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-bold text-sm text-neutral-950 dark:text-white">
-                        ServiceNow University – Virtual Internship Program
+                      <h3 className="font-bold text-base text-neutral-950 dark:text-white">
+                        SmartBridge + AICTE · ServiceNow University Virtual Internship Program (FY26 Cohort 5)
                       </h3>
                       <span className="text-[11px] font-mono text-neutral-500 dark:text-neutral-400 shrink-0">
-                        Jun – Jul 2026
+                        Virtual, 10 Jun – 6 Jul 2026
                       </span>
                     </div>
                     <p className="text-xs text-neutral-700 dark:text-neutral-300 mt-1 leading-relaxed">
-                      Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases.
+                      Completed hands-on learning on the ServiceNow platform (ITSM, Service Catalog, Workflow Studio, Platform Analytics) and enterprise automation use cases. Grand assessment completed on 3 Jul 2026.
                     </p>
                   </div>
                 </div>

@@ -25,7 +25,7 @@ Academic & Background Credentials:
 - B.Tech CSE (2024–2028 Expected) at Koneru Lakshmaiah Education Foundation, Hyderabad (CGPA: 9.33/10.0).
 - HSC at Vinjee (Score: 90%).
 - IBM SkillsBuild AI & Cloud Internship (Jun–Jul 2026).
-- ServiceNow University Virtual Internship (Jun–Jul 2026).
+- SmartBridge + AICTE · ServiceNow University Virtual Internship Program (FY26 Cohort 5, 10 Jun 2026 – 6 Jul 2026).
 - Certifications: Azure AI Fundamentals (AI-900), Google Cloud Gen AI Academy 2.0, Cisco Data Analytics Essentials, Aviatrix ACE.
 - Honors: AWS AI for Bharat Hackathon badge, CodeChef 2-Star, Cambridge Linguaskill B2.
 
