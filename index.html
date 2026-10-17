@@ -14,6 +14,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-[#ECECEB] text-[#111111] antialiased selection:bg-neutral-900 selection:text-neutral-100 min-h-screen">
+    <!-- Netlify Native Form Detection -->
+    <form name="portfolio-contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="portfolio-contact" />
+      <input type="text" name="bot-field" />
+      <input type="text" name="fullName" />
+      <input type="email" name="email" />
+      <input type="text" name="projectType" />
+      <input type="text" name="budget" />
+      <textarea name="details"></textarea>
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
