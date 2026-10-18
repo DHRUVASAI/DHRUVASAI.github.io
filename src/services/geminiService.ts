@@ -37,8 +37,16 @@ const DEFAULT_API_KEY = (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
 export async function sendMessageToDobby(
   message: string,
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
-  preferredModel: string = 'gemini-2.5-flash'
+  preferredModel: string = 'gemini-flash-latest'
 ): Promise<{ reply: string; model: string }> {
+  // Normalize any legacy or deprecated model names
+  const normalizedPreferred =
+    preferredModel === 'gemini-1.5-pro' || preferredModel === 'gemini-2.5-pro'
+      ? 'gemini-3.8-flash'
+      : preferredModel === 'gemini-2.5-flash' || preferredModel === 'gemini-2.0-flash'
+      ? 'gemini-flash-latest'
+      : preferredModel || 'gemini-flash-latest';
+
   // 1. Try local Express endpoint if available (e.g. running locally via server.ts)
   try {
     const localRes = await fetch('/api/chat', {
@@ -47,7 +55,7 @@ export async function sendMessageToDobby(
       body: JSON.stringify({
         message,
         history,
-        model: preferredModel,
+        model: normalizedPreferred,
       }),
       signal: AbortSignal.timeout(4000),
     });
@@ -55,7 +63,7 @@ export async function sendMessageToDobby(
     if (localRes.ok) {
       const data = await localRes.json();
       if (data.reply) {
-        return { reply: data.reply, model: data.model || preferredModel };
+        return { reply: data.reply, model: data.model || normalizedPreferred };
       }
     }
   } catch {
@@ -68,10 +76,13 @@ export async function sendMessageToDobby(
   }
 
   const candidateModels = [
-    preferredModel,
-    'gemini-2.5-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-pro',
+    normalizedPreferred,
+    'gemini-3.5-flash',
+    'gemini-flash-latest',
+    'gemini-3.5-flash-lite',
+    'gemini-3.1-flash-lite',
+    'gemini-flash-lite-latest',
+    'gemini-3.8-flash',
   ].filter((v, i, a) => a.indexOf(v) === i);
 
   // Format history for Gemini contents

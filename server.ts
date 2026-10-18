@@ -62,13 +62,25 @@ app.post('/api/chat', async (req, res) => {
       return res.status(400).json({ error: 'A valid message string is required.' });
     }
 
-    // Supported official models:
-    // 'gemini-2.5-flash' (general fast tasks)
-    // 'gemini-2.0-flash' (low latency)
-    // 'gemini-1.5-pro' (deep reasoning)
-    let selectedModel = model || 'gemini-2.5-flash';
-    if (!['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'].includes(selectedModel)) {
-      selectedModel = 'gemini-2.5-flash';
+    // Supported active models:
+    // 'gemini-flash-latest' (recommended production default)
+    // 'gemini-3.8-flash' (high precision intelligence)
+    // 'gemini-3.5-flash' (balanced speed & reliability)
+    // 'gemini-flash-lite-latest' (ultra-fast low latency)
+    const SUPPORTED_MODELS = [
+      'gemini-flash-latest',
+      'gemini-3.8-flash',
+      'gemini-3.5-flash',
+      'gemini-flash-lite-latest',
+    ];
+
+    let selectedModel = model || 'gemini-flash-latest';
+    if (selectedModel === 'gemini-1.5-pro' || selectedModel === 'gemini-2.5-pro') {
+      selectedModel = 'gemini-3.8-flash';
+    } else if (selectedModel === 'gemini-2.5-flash' || selectedModel === 'gemini-2.0-flash') {
+      selectedModel = 'gemini-flash-latest';
+    } else if (!SUPPORTED_MODELS.includes(selectedModel)) {
+      selectedModel = 'gemini-flash-latest';
     }
 
     // Format chat history
@@ -77,36 +89,43 @@ app.post('/api/chat', async (req, res) => {
       parts: typeof h.content === 'string' ? [{ text: h.content }] : h.parts || [{ text: '' }],
     }));
 
-    let response;
+    const candidateModels = [
+      selectedModel,
+      'gemini-3.5-flash',
+      'gemini-flash-latest',
+      'gemini-3.5-flash-lite',
+      'gemini-3.1-flash-lite',
+      'gemini-flash-lite-latest',
+      'gemini-3.8-flash',
+    ].filter((v, i, a) => a.indexOf(v) === i);
+
+    let response: any = null;
     let finalModel = selectedModel;
+    let lastError: any = null;
 
-    try {
-      const chat = ai.chats.create({
-        model: selectedModel,
-        config: {
-          systemInstruction: systemInstruction || DEFAULT_SYSTEM_INSTRUCTION,
-        },
-        history: formattedHistory,
-      });
+    for (const curModel of candidateModels) {
+      try {
+        const chat = ai.chats.create({
+          model: curModel,
+          config: {
+            systemInstruction: systemInstruction || DEFAULT_SYSTEM_INSTRUCTION,
+          },
+          history: formattedHistory,
+        });
 
-      response = await chat.sendMessage({
-        message: message,
-      });
-    } catch (modelErr: any) {
-      console.warn(`Model ${selectedModel} encountered error, trying fallback model...`, modelErr.message);
-      const fallbackModel = selectedModel === 'gemini-2.0-flash' ? 'gemini-2.5-flash' : 'gemini-2.0-flash';
-      const fallbackChat = ai.chats.create({
-        model: fallbackModel,
-        config: {
-          systemInstruction: systemInstruction || DEFAULT_SYSTEM_INSTRUCTION,
-        },
-        history: formattedHistory,
-      });
+        response = await chat.sendMessage({
+          message: message,
+        });
+        finalModel = curModel;
+        break;
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`Model ${curModel} failed in server, trying next fallback...`, err.message);
+      }
+    }
 
-      response = await fallbackChat.sendMessage({
-        message: message,
-      });
-      finalModel = fallbackModel;
+    if (!response) {
+      throw lastError || new Error('All model candidates failed');
     }
 
     res.json({

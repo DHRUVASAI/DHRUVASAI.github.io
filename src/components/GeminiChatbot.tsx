@@ -144,13 +144,15 @@ I know all about Dhruva's flagship engineering projects (*EDGE, GARUDA, TeamForg
 
 Ask me anything about Dhruva's technical systems, architecture blueprints, or background!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        modelUsed: 'gemini-2.5-flash'
+        modelUsed: 'gemini-flash-latest'
       }
     ];
   });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<'gemini-2.5-flash' | 'gemini-2.0-flash' | 'gemini-1.5-pro'>('gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState<
+    'gemini-flash-latest' | 'gemini-3.8-flash' | 'gemini-3.5-flash' | 'gemini-flash-lite-latest'
+  >('gemini-flash-latest');
   const [showModelPicker, setShowModelPicker] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -289,70 +291,89 @@ Ask me anything about Dhruva's technical systems, architecture blueprints, or ba
                 >
                   <Cpu className="w-3 h-3 text-indigo-500" />
                   <span className="hidden sm:inline">
-                    {selectedModel === 'gemini-2.5-flash' && '2.5 Flash'}
-                    {selectedModel === 'gemini-2.0-flash' && '2.0 Flash'}
-                    {selectedModel === 'gemini-1.5-pro' && '1.5 Pro'}
+                    {selectedModel === 'gemini-flash-latest' && 'Flash Latest'}
+                    {selectedModel === 'gemini-3.8-flash' && '3.8 Flash'}
+                    {selectedModel === 'gemini-3.5-flash' && '3.5 Flash'}
+                    {selectedModel === 'gemini-flash-lite-latest' && 'Flash Lite'}
                   </span>
                   <ChevronDown className="w-3 h-3 opacity-60" />
                 </button>
 
                 {showModelPicker && (
-                  <div className="absolute right-0 top-full mt-1.5 w-52 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xl p-1.5 z-50 text-[11px] font-mono">
+                  <div className="absolute right-0 top-full mt-1.5 w-56 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xl p-1.5 z-50 text-[11px] font-mono">
                     <div className="px-2 py-1 text-[9px] text-neutral-400 uppercase font-semibold">
                       Select Gemini Model
                     </div>
                     <button
                       onClick={() => {
-                        setSelectedModel('gemini-2.5-flash');
+                        setSelectedModel('gemini-flash-latest');
                         setShowModelPicker(false);
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between ${
-                        selectedModel === 'gemini-2.5-flash'
+                        selectedModel === 'gemini-flash-latest'
                           ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold'
                           : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                       }`}
                     >
                       <div>
-                        <div>Gemini 2.5 Flash</div>
+                        <div>Gemini Flash (Latest)</div>
                         <div className="text-[9px] font-sans text-neutral-400 font-normal">Recommended · Fast & Multimodal</div>
                       </div>
-                      {selectedModel === 'gemini-2.5-flash' && <Check className="w-3.5 h-3.5" />}
+                      {selectedModel === 'gemini-flash-latest' && <Check className="w-3.5 h-3.5" />}
                     </button>
 
                     <button
                       onClick={() => {
-                        setSelectedModel('gemini-2.0-flash');
+                        setSelectedModel('gemini-3.8-flash');
                         setShowModelPicker(false);
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between mt-1 ${
-                        selectedModel === 'gemini-2.0-flash'
+                        selectedModel === 'gemini-3.8-flash'
                           ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold'
                           : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                       }`}
                     >
                       <div>
-                        <div>Gemini 2.0 Flash</div>
-                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Real-time · Low Latency</div>
+                        <div>Gemini 3.8 Flash</div>
+                        <div className="text-[9px] font-sans text-neutral-400 font-normal">High Intelligence & Precision</div>
                       </div>
-                      {selectedModel === 'gemini-2.0-flash' && <Check className="w-3.5 h-3.5" />}
+                      {selectedModel === 'gemini-3.8-flash' && <Check className="w-3.5 h-3.5" />}
                     </button>
 
                     <button
                       onClick={() => {
-                        setSelectedModel('gemini-1.5-pro');
+                        setSelectedModel('gemini-3.5-flash');
                         setShowModelPicker(false);
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between mt-1 ${
-                        selectedModel === 'gemini-1.5-pro'
+                        selectedModel === 'gemini-3.5-flash'
                           ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold'
                           : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                       }`}
                     >
                       <div>
-                        <div>Gemini 1.5 Pro</div>
-                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Deep Technical Reasoning</div>
+                        <div>Gemini 3.5 Flash</div>
+                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Balanced Speed & Reliability</div>
                       </div>
-                      {selectedModel === 'gemini-1.5-pro' && <Check className="w-3.5 h-3.5" />}
+                      {selectedModel === 'gemini-3.5-flash' && <Check className="w-3.5 h-3.5" />}
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSelectedModel('gemini-flash-lite-latest');
+                        setShowModelPicker(false);
+                      }}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between mt-1 ${
+                        selectedModel === 'gemini-flash-lite-latest'
+                          ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold'
+                          : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
+                      }`}
+                    >
+                      <div>
+                        <div>Gemini Flash Lite</div>
+                        <div className="text-[9px] font-sans text-neutral-400 font-normal">Ultra-Low Latency & High Speed</div>
+                      </div>
+                      {selectedModel === 'gemini-flash-lite-latest' && <Check className="w-3.5 h-3.5" />}
                     </button>
                   </div>
                 )}
