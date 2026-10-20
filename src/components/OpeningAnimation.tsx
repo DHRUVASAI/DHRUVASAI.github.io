@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Sparkles, Bot } from 'lucide-react';
+import { ArrowRight, Sparkles, Bot, Volume2, VolumeX } from 'lucide-react';
 
 interface OpeningAnimationProps {
   onComplete: () => void;
@@ -9,6 +9,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
   const [progress, setProgress] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasTriggeredProceed = useRef(false);
 
@@ -21,7 +22,22 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     }, 600);
   };
 
-  // Autoplay Immediately on Open & Keep Sound Default ON
+  const unmuteAudio = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = false;
+    video.volume = 1.0;
+    // Rewind back to 0:00 if it was playing muted so the full greeting is heard
+    if (video.currentTime > 0.4 && video.currentTime < 4.8) {
+      video.currentTime = 0;
+    }
+    video.play().catch(() => {});
+    setIsMuted(false);
+  };
+
+  // Video Autoplay Immediately on Open
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -32,39 +48,50 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
 
     const startPlaying = async () => {
       try {
-        // 1. Attempt immediate unmuted playback (Default Sound ON)
+        // 1. Attempt immediate unmuted playback
         await video.play();
-        if (isMounted) setIsPlaying(true);
+        if (isMounted) {
+          setIsPlaying(true);
+          setIsMuted(false);
+        }
       } catch {
         // 2. If browser requires user interaction first, start playing video immediately without stopping
         try {
           video.muted = true;
           await video.play();
-          if (isMounted) setIsPlaying(true);
+          if (isMounted) {
+            setIsPlaying(true);
+            setIsMuted(true);
+          }
         } catch {
           // Ignore
         }
 
-        // Unmute to full volume the instant user taps or clicks anywhere
-        const unmute = () => {
-          if (videoRef.current) {
+        // Unmute and rewind to start the instant user taps or clicks anywhere
+        const handleFirstInteraction = () => {
+          if (videoRef.current && videoRef.current.muted) {
             videoRef.current.muted = false;
             videoRef.current.volume = 1.0;
+            if (videoRef.current.currentTime > 0.4 && videoRef.current.currentTime < 4.8) {
+              videoRef.current.currentTime = 0;
+            }
+            videoRef.current.play().catch(() => {});
+            setIsMuted(false);
           }
           cleanup();
         };
 
         const cleanup = () => {
-          window.removeEventListener('pointerdown', unmute);
-          window.removeEventListener('touchstart', unmute);
-          window.removeEventListener('click', unmute);
-          window.removeEventListener('keydown', unmute);
+          window.removeEventListener('pointerdown', handleFirstInteraction);
+          window.removeEventListener('touchstart', handleFirstInteraction);
+          window.removeEventListener('click', handleFirstInteraction);
+          window.removeEventListener('keydown', handleFirstInteraction);
         };
 
-        window.addEventListener('pointerdown', unmute, { once: true });
-        window.addEventListener('touchstart', unmute, { once: true });
-        window.addEventListener('click', unmute, { once: true });
-        window.addEventListener('keydown', unmute, { once: true });
+        window.addEventListener('pointerdown', handleFirstInteraction, { once: true });
+        window.addEventListener('touchstart', handleFirstInteraction, { once: true });
+        window.addEventListener('click', handleFirstInteraction, { once: true });
+        window.addEventListener('keydown', handleFirstInteraction, { once: true });
       }
     };
 
@@ -126,9 +153,8 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
   return (
     <div
       onClick={() => {
-        if (videoRef.current && videoRef.current.muted) {
-          videoRef.current.muted = false;
-          videoRef.current.volume = 1.0;
+        if (isMuted) {
+          unmuteAudio();
         }
       }}
       className={`fixed inset-0 z-[100] flex flex-col items-center justify-between bg-[#07080D] text-white select-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto px-4 py-3 sm:py-6 cursor-pointer ${
@@ -175,7 +201,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
           {/* Subtle Glowing Aura */}
           <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-tr from-emerald-500/20 via-indigo-500/25 to-amber-500/20 blur-lg opacity-75 group-hover:opacity-100 transition-opacity"></div>
 
-          {/* Video Container - Plays Immediately without any Tap Overlays */}
+          {/* Video Container - Autoplays Immediately */}
           <div className="relative w-44 h-56 sm:w-52 sm:h-64 rounded-2xl sm:rounded-3xl overflow-hidden bg-white border-2 border-white/30 shadow-[0_15px_40px_rgba(0,0,0,0.6)] group-hover:scale-[1.02] transition-transform duration-500">
             <video
               ref={videoRef}
@@ -189,6 +215,29 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
               onPlay={() => setIsPlaying(true)}
               className="w-full h-full object-cover object-[50%_45%]"
             />
+
+            {/* Sleek, Non-Intrusive Sound Badge in Corner */}
+            <button
+              onClick={unmuteAudio}
+              className={`absolute top-2.5 right-2.5 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg cursor-pointer select-none ${
+                isMuted
+                  ? 'bg-neutral-950/85 hover:bg-neutral-900 text-amber-300 border border-amber-400/50 hover:scale-105 animate-pulse'
+                  : 'bg-neutral-950/70 text-emerald-400 border border-emerald-400/40'
+              }`}
+              title={isMuted ? 'Click to unmute voice' : 'Sound is ON'}
+            >
+              {isMuted ? (
+                <>
+                  <VolumeX className="w-3.5 h-3.5 text-amber-300" />
+                  <span className="text-[10px] font-mono font-medium tracking-tight">Tap for sound</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-[10px] font-mono font-medium tracking-tight">Sound ON</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
 
@@ -196,7 +245,7 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
         <div className="mb-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 max-w-sm mx-auto shadow-sm">
           <p className="text-[11px] sm:text-xs text-neutral-200 font-mono italic flex items-center justify-center gap-1.5">
             <span>"Oh, hello there. Yes, I am talking to you. Welcome to my portfolio!"</span>
-            {isPlaying && (
+            {!isMuted && isPlaying && (
               <span className="inline-flex items-center gap-0.5 ml-1">
                 <span className="w-1 h-2.5 bg-emerald-400 rounded-full animate-[pulse_0.6s_ease-in-out_infinite]"></span>
                 <span className="w-1 h-3.5 bg-emerald-400 rounded-full animate-[pulse_0.8s_ease-in-out_infinite]"></span>
@@ -277,7 +326,9 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
       {/* Bottom Hint Footer */}
       <footer className="w-full text-center z-20 pointer-events-none shrink-0 mt-1">
         <p className="text-[9px] sm:text-[10px] font-mono text-neutral-500">
-          🔊 Sound is ON · Press Esc to enter portfolio
+          {isMuted
+            ? '🔇 Tap anywhere for sound · Press Esc to enter portfolio'
+            : '🔊 Sound is ON · Press Esc to enter portfolio'}
         </p>
       </footer>
     </div>
