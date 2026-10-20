@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Sparkles, Bot, Volume2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Bot } from 'lucide-react';
 
 interface OpeningAnimationProps {
   onComplete: () => void;
@@ -9,7 +9,6 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
   const [progress, setProgress] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [needsClickToPlay, setNeedsClickToPlay] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasTriggeredProceed = useRef(false);
 
@@ -22,94 +21,70 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
     }, 600);
   };
 
-  const startPlaybackWithSound = () => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = false;
-    video.volume = 1.0;
-    video
-      .play()
-      .then(() => {
-        setIsPlaying(true);
-        setNeedsClickToPlay(false);
-      })
-      .catch((err) => {
-        console.warn('Autoplay with sound waiting for user gesture:', err);
-        setNeedsClickToPlay(true);
-      });
-  };
-
-  // Video Autoplay & Unmuted Audio Initialization (SOUND PERMANENTLY ON)
+  // Autoplay Immediately on Open & Keep Sound Default ON
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Audio is strictly unmuted and at 100% volume
-    video.muted = false;
+    let isMounted = true;
     video.volume = 1.0;
+    video.muted = false;
 
-    // 1. Attempt unmuted playback immediately on mount
-    video
-      .play()
-      .then(() => {
-        setIsPlaying(true);
-        setNeedsClickToPlay(false);
-      })
-      .catch(() => {
-        // If the browser autoplay security policy requires user gesture before unmuted playback:
-        // NEVER mute the video! Instead, wait at 0:00 for the user's first tap/click to play with full sound.
-        setNeedsClickToPlay(true);
-      });
+    const startPlaying = async () => {
+      try {
+        // 1. Attempt immediate unmuted playback (Default Sound ON)
+        await video.play();
+        if (isMounted) setIsPlaying(true);
+      } catch {
+        // 2. If browser requires user interaction first, start playing video immediately without stopping
+        try {
+          video.muted = true;
+          await video.play();
+          if (isMounted) setIsPlaying(true);
+        } catch {
+          // Ignore
+        }
 
-    // 2. Global listener: clicking/tapping anywhere or pressing any key starts unmuted playback instantly
-    const handleUserInteraction = (e: Event) => {
-      const target = e.target as HTMLElement | null;
-      if (target?.closest('button[data-skip="true"]')) {
-        return;
-      }
+        // Unmute to full volume the instant user taps or clicks anywhere
+        const unmute = () => {
+          if (videoRef.current) {
+            videoRef.current.muted = false;
+            videoRef.current.volume = 1.0;
+          }
+          cleanup();
+        };
 
-      if (videoRef.current && (videoRef.current.paused || needsClickToPlay)) {
-        videoRef.current.muted = false;
-        videoRef.current.volume = 1.0;
-        videoRef.current
-          .play()
-          .then(() => {
-            setIsPlaying(true);
-            setNeedsClickToPlay(false);
-          })
-          .catch(() => {});
+        const cleanup = () => {
+          window.removeEventListener('pointerdown', unmute);
+          window.removeEventListener('touchstart', unmute);
+          window.removeEventListener('click', unmute);
+          window.removeEventListener('keydown', unmute);
+        };
+
+        window.addEventListener('pointerdown', unmute, { once: true });
+        window.addEventListener('touchstart', unmute, { once: true });
+        window.addEventListener('click', unmute, { once: true });
+        window.addEventListener('keydown', unmute, { once: true });
       }
     };
 
-    window.addEventListener('pointerdown', handleUserInteraction);
-    window.addEventListener('touchstart', handleUserInteraction);
-    window.addEventListener('click', handleUserInteraction);
+    startPlaying();
 
     return () => {
-      window.removeEventListener('pointerdown', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
-      window.removeEventListener('click', handleUserInteraction);
+      isMounted = false;
     };
-  }, [needsClickToPlay]);
+  }, []);
 
   // Keyboard shortcut listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
         handleProceed();
-      } else if (e.key === ' ' || e.key === 'Enter') {
-        if (needsClickToPlay) {
-          e.preventDefault();
-          startPlaybackWithSound();
-        } else {
-          handleProceed();
-        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [needsClickToPlay]);
+  }, []);
 
   // Video Progress & Time Sync: tracks actual video playback
   const handleTimeUpdate = () => {
@@ -142,7 +117,6 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
   }, [isPlaying]);
 
   const getStatusText = (val: number) => {
-    if (needsClickToPlay) return 'Tap anywhere to start with sound...';
     if (val < 30) return 'Initializing portfolio systems...';
     if (val < 70) return 'Calibrating AI engineering modules...';
     if (val < 98) return 'Loading production architectures...';
@@ -152,8 +126,9 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
   return (
     <div
       onClick={() => {
-        if (needsClickToPlay) {
-          startPlaybackWithSound();
+        if (videoRef.current && videoRef.current.muted) {
+          videoRef.current.muted = false;
+          videoRef.current.volume = 1.0;
         }
       }}
       className={`fixed inset-0 z-[100] flex flex-col items-center justify-between bg-[#07080D] text-white select-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto px-4 py-3 sm:py-6 cursor-pointer ${
@@ -200,45 +175,20 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
           {/* Subtle Glowing Aura */}
           <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-tr from-emerald-500/20 via-indigo-500/25 to-amber-500/20 blur-lg opacity-75 group-hover:opacity-100 transition-opacity"></div>
 
-          {/* Video Container */}
-          <div
-            onClick={(e) => {
-              if (needsClickToPlay) {
-                e.stopPropagation();
-                startPlaybackWithSound();
-              }
-            }}
-            className="relative w-44 h-56 sm:w-52 sm:h-64 rounded-2xl sm:rounded-3xl overflow-hidden bg-white border-2 border-white/30 shadow-[0_15px_40px_rgba(0,0,0,0.6)] group-hover:scale-[1.02] transition-transform duration-500 cursor-pointer"
-          >
+          {/* Video Container - Plays Immediately without any Tap Overlays */}
+          <div className="relative w-44 h-56 sm:w-52 sm:h-64 rounded-2xl sm:rounded-3xl overflow-hidden bg-white border-2 border-white/30 shadow-[0_15px_40px_rgba(0,0,0,0.6)] group-hover:scale-[1.02] transition-transform duration-500">
             <video
               ref={videoRef}
               src="/dhruva.mp4"
               poster="/dhruva-video-poster.jpg"
+              autoPlay
               playsInline
               preload="auto"
               onTimeUpdate={handleTimeUpdate}
               onEnded={handleVideoEnded}
-              onPlay={() => {
-                setIsPlaying(true);
-                setNeedsClickToPlay(false);
-              }}
+              onPlay={() => setIsPlaying(true)}
               className="w-full h-full object-cover object-[50%_45%]"
             />
-
-            {/* Tap to Play with Sound Overlay if Browser Required Interaction */}
-            {needsClickToPlay && (
-              <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/55 backdrop-blur-[2px] p-3 text-center transition-all animate-in fade-in duration-300">
-                <div className="w-13 h-13 rounded-full bg-gradient-to-tr from-emerald-500 to-indigo-600 text-white flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.8)] mb-2.5 animate-bounce">
-                  <Volume2 className="w-6 h-6 text-white ml-0.5" />
-                </div>
-                <span className="text-xs font-bold text-white tracking-wide bg-neutral-900/90 px-3 py-1 rounded-full border border-emerald-400/50 shadow-lg">
-                  Tap to Play with Sound 🔊
-                </span>
-                <span className="text-[10px] text-neutral-300 mt-1.5 font-mono">
-                  Sound is ON by default
-                </span>
-              </div>
-            )}
           </div>
         </div>
 
@@ -324,12 +274,10 @@ export const OpeningAnimation: React.FC<OpeningAnimationProps> = ({ onComplete }
         </div>
       </section>
 
-      {/* Bottom Hint Footer - Always visible & pinned */}
+      {/* Bottom Hint Footer */}
       <footer className="w-full text-center z-20 pointer-events-none shrink-0 mt-1">
         <p className="text-[9px] sm:text-[10px] font-mono text-neutral-500">
-          {needsClickToPlay
-            ? '🔊 Sound is ON — Tap anywhere to play with audio'
-            : '🔊 Sound is ON · Press Esc to enter portfolio'}
+          🔊 Sound is ON · Press Esc to enter portfolio
         </p>
       </footer>
     </div>
