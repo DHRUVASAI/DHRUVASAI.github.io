@@ -4,6 +4,12 @@ import { ArrowUpRight, Github, Linkedin, Mail, Phone, ExternalLink } from 'lucid
 import { IdentityCard } from './IdentityCard.tsx';
 import { TechStackWidget } from './TechStackWidget.tsx';
 import { VisitorCounter } from './VisitorCounter.tsx';
+import DecryptedText from './ui/DecryptedText/DecryptedText';
+import ShinyText from './ui/ShinyText/ShinyText';
+import SpotlightCard from './ui/SpotlightCard/SpotlightCard';
+import Magnet from './ui/Magnet/Magnet';
+import CountUp from './ui/CountUp/CountUp';
+import { useTheme } from '../context/ThemeContext.tsx';
 
 interface AboutViewProps {
   onNavigate: (view: 'home' | 'about' | 'portfolio' | 'contact') => void;
@@ -12,6 +18,7 @@ interface AboutViewProps {
 }
 
 export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject, onOpenResume }) => {
+  const { theme } = useTheme();
   const garudaProject = PROJECTS.find((p) => p.id === 'garuda-x');
   const vibeProject = PROJECTS.find((p) => p.id === 'vibeverse');
 
@@ -21,10 +28,22 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
         {/* Title Section */}
         <section className="mb-12 md:mb-16">
           <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-neutral-950 dark:text-white transition-colors">
-            About
+            <DecryptedText
+              text="About Dhruva"
+              speed={45}
+              maxIterations={12}
+              animateOn="view"
+              revealDirection="start"
+              className="text-neutral-950 dark:text-white"
+              encryptedClassName="text-neutral-400 dark:text-neutral-600 font-mono"
+            />
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-neutral-600 dark:text-neutral-300 font-medium tracking-tight mt-3 transition-colors">
-            {PERSONAL_INFO.role} · {PERSONAL_INFO.location}
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 dark:text-neutral-300 font-medium tracking-tight mt-3 transition-colors flex items-center gap-2">
+            <ShinyText
+              text={`${PERSONAL_INFO.role} · ${PERSONAL_INFO.location}`}
+              speed={3}
+              className="text-neutral-600 dark:text-neutral-300 font-medium"
+            />
           </p>
         </section>
 
@@ -53,13 +72,15 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
               className="w-full max-w-[420px] aspect-[4/5] min-h-[380px]"
             />
             {onOpenResume && (
-              <button
-                onClick={onOpenResume}
-                className="w-full max-w-[420px] py-2.5 px-4 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 hover:bg-black dark:hover:bg-neutral-100 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
-              >
-                <span>View Full Curriculum Vitae / Resume</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
+              <Magnet padding={12} magnetStrength={2} className="w-full max-w-[420px]">
+                <button
+                  onClick={onOpenResume}
+                  className="w-full py-2.5 px-4 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 hover:bg-black dark:hover:bg-neutral-100 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
+                >
+                  <span>View Full Curriculum Vitae / Resume</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              </Magnet>
             )}
           </div>
         </section>
@@ -87,7 +108,12 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Education Card */}
-            <div className="p-8 rounded-3xl bg-neutral-200/60 dark:bg-[#12141c]/80 border border-neutral-300/70 dark:border-white/10 flex flex-col justify-between transition-colors">
+            <SpotlightCard
+              theme={theme}
+              spotlightColor={theme === 'dark' ? 'rgba(16, 185, 129, 0.22)' : 'rgba(16, 185, 129, 0.12)'}
+              style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+              className="!p-8 rounded-3xl bg-neutral-200/60 dark:bg-[#12141c]/80 border border-neutral-300/70 dark:border-white/10 flex flex-col justify-between transition-colors"
+            >
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block mb-3">
                   Academic Credentials
@@ -98,8 +124,8 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
                       <h3 className="font-bold text-base text-neutral-950 dark:text-white">
                         B.Tech – Computer Science and Engineering
                       </h3>
-                      <span className="text-xs font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-800/20 px-2 py-0.5 rounded-full shrink-0">
-                        CGPA: 9.33/10.0
+                      <span className="text-xs font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-800/20 px-2 py-0.5 rounded-full shrink-0 inline-flex items-center gap-1">
+                        CGPA: <CountUp to={9.33} from={0} decimals={2} duration={1.2} /> / 10.0
                       </span>
                     </div>
                     <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
@@ -129,10 +155,15 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
                 <span className="bg-white/80 dark:bg-neutral-800 px-2 py-0.5 rounded border border-black/5 dark:border-white/10">OOP</span>
                 <span className="bg-white/80 dark:bg-neutral-800 px-2 py-0.5 rounded border border-black/5 dark:border-white/10">Machine Learning</span>
               </div>
-            </div>
+            </SpotlightCard>
 
             {/* Experience Card */}
-            <div className="p-8 rounded-3xl bg-neutral-200/60 dark:bg-[#12141c]/80 border border-neutral-300/70 dark:border-white/10 flex flex-col justify-between transition-colors">
+            <SpotlightCard
+              theme={theme}
+              spotlightColor={theme === 'dark' ? 'rgba(99, 102, 241, 0.22)' : 'rgba(99, 102, 241, 0.12)'}
+              style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+              className="!p-8 rounded-3xl bg-neutral-200/60 dark:bg-[#12141c]/80 border border-neutral-300/70 dark:border-white/10 flex flex-col justify-between transition-colors"
+            >
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block mb-3">
                   Professional Internships
@@ -174,11 +205,16 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
                 <span className="bg-white/80 dark:bg-neutral-800 px-2 py-0.5 rounded border border-black/5 dark:border-white/10">GCP</span>
                 <span className="bg-white/80 dark:bg-neutral-800 px-2 py-0.5 rounded border border-black/5 dark:border-white/10">IBM Cloud</span>
               </div>
-            </div>
+            </SpotlightCard>
           </div>
 
           {/* Achievements & Certifications Pill Bar */}
-          <div className="mt-6 p-6 rounded-3xl bg-neutral-900 dark:bg-[#181b26] border border-transparent dark:border-white/10 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors">
+          <SpotlightCard
+            theme={theme}
+            spotlightColor={theme === 'dark' ? 'rgba(245, 158, 11, 0.25)' : 'rgba(245, 158, 11, 0.15)'}
+            style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+            className="mt-6 !p-6 rounded-3xl bg-neutral-900 dark:bg-[#181b26] border border-transparent dark:border-white/10 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors"
+          >
             <div className="space-y-1">
               <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400">
                 Key Honors & Certifications
@@ -188,14 +224,16 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
               </p>
             </div>
             {onOpenResume && (
-              <button
-                onClick={onOpenResume}
-                className="px-4 py-2 rounded-xl bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 text-xs font-semibold transition-colors shrink-0 shadow-xs"
-              >
-                View Full Details
-              </button>
+              <Magnet padding={10} magnetStrength={2}>
+                <button
+                  onClick={onOpenResume}
+                  className="px-4 py-2 rounded-xl bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 text-xs font-semibold transition-colors shrink-0 shadow-xs cursor-pointer"
+                >
+                  View Full Details
+                </button>
+              </Magnet>
             )}
-          </div>
+          </SpotlightCard>
         </section>
 
         {/* Core Stack & Technical Repertoire */}

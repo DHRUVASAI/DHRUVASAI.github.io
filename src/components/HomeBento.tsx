@@ -13,11 +13,22 @@ import {
   Shield,
   Layers,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Terminal,
+  Activity
 } from 'lucide-react';
 import { IdentityCard } from './IdentityCard.tsx';
 import { TechStackWidget } from './TechStackWidget.tsx';
 import { VisitorCounter } from './VisitorCounter.tsx';
+import { TechMarquee } from './TechMarquee.tsx';
+import DecryptedText from './ui/DecryptedText/DecryptedText';
+import RotatingText from './ui/RotatingText/RotatingText';
+import ShinyText from './ui/ShinyText/ShinyText';
+import SpotlightCard from './ui/SpotlightCard/SpotlightCard';
+import Magnet from './ui/Magnet/Magnet';
+import CountUp from './ui/CountUp/CountUp';
+import { useTheme } from '../context/ThemeContext.tsx';
+import { playClickSound, playHoverSound } from '../utils/soundEffects.ts';
 
 interface HomeBentoProps {
   onNavigate: (view: 'home' | 'about' | 'portfolio' | 'contact') => void;
@@ -30,39 +41,122 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
   onOpenProject,
   onOpenResume
 }) => {
+  const { theme } = useTheme();
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const handleCopyEmail = (e: React.MouseEvent) => {
     e.stopPropagation();
+    playClickSound();
     navigator.clipboard.writeText(PERSONAL_INFO.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
   return (
-    <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-4 pb-16 flex-1 flex flex-col justify-start">
-      {/* Hero Headline Section - Visible, Unobstructed, Crisp */}
-      <section className="w-full pt-2 pb-6 md:pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-black/10 dark:border-white/10 transition-colors">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-semibold">
-              Personal Portfolio & Systems Work
-            </span>
-          </div>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-bold tracking-tight text-neutral-950 dark:text-white leading-none transition-colors">
-            {PERSONAL_INFO.name}
-          </h1>
-        </div>
+    <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-2 sm:pt-4 pb-28 flex-1 flex flex-col justify-start">
+      {/* Hero Headline Section - Pranjal Mishra Inspired High-Impact Staging */}
+      <section className="w-full pt-2 pb-8 md:pb-12 border-b border-black/10 dark:border-white/10 transition-colors">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="max-w-3xl">
+            {/* Top Status & Email Pill Bar */}
+            <div className="flex flex-wrap items-center gap-2.5 mb-3 sm:mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:text-emerald-400 text-xs font-semibold shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Available for Summer 2026 Roles</span>
+              </div>
 
-        <div className="flex flex-col md:items-end text-neutral-600 dark:text-neutral-300 text-sm sm:text-base font-normal max-w-md transition-colors">
-          <span className="font-semibold text-neutral-900 dark:text-white">{PERSONAL_INFO.role}</span>
-          <span className="text-neutral-500 dark:text-neutral-400 text-xs sm:text-sm">
-            Hyderabad, India · CSE & AI Product Engineering
-          </span>
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 md:text-right italic">
-            “Discovering what should exist next.”
-          </p>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs text-neutral-700 dark:text-neutral-300 font-mono">
+                <Mail className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />
+                <span>{PERSONAL_INFO.email}</span>
+                <button
+                  onClick={handleCopyEmail}
+                  className="ml-1 text-[10px] font-bold text-neutral-800 dark:text-neutral-200 hover:text-black dark:hover:text-white px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 cursor-pointer"
+                  title="Copy email to clipboard"
+                >
+                  {copiedEmail ? 'Copied ✓' : 'Copy'}
+                </button>
+              </div>
+            </div>
+
+            {/* Display Name with DecryptedText */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.04] transition-colors">
+              <DecryptedText
+                text={PERSONAL_INFO.name}
+                speed={45}
+                maxIterations={14}
+                animateOn="view"
+                revealDirection="start"
+                className="text-neutral-950 dark:text-white"
+                encryptedClassName="text-neutral-400 dark:text-neutral-600 font-mono"
+              />
+            </h1>
+
+            {/* Dual Hero CTAs (View My Work & Resume) */}
+            <div className="flex flex-wrap items-center gap-3 pt-5">
+              <Magnet padding={12} magnetStrength={2}>
+                <button
+                  onClick={() => {
+                    playClickSound();
+                    onNavigate('portfolio');
+                  }}
+                  onMouseEnter={playHoverSound}
+                  className="px-5 py-2.5 rounded-xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-neutral-100 font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-lg hover:shadow-indigo-500/25 transition-all cursor-pointer group"
+                >
+                  <Layers className="w-4 h-4 text-emerald-400 dark:text-emerald-600" />
+                  <span>View My Work</span>
+                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </button>
+              </Magnet>
+
+              <Magnet padding={12} magnetStrength={2}>
+                <button
+                  onClick={() => {
+                    playClickSound();
+                    onOpenResume();
+                  }}
+                  onMouseEnter={playHoverSound}
+                  className="px-4 py-2.5 rounded-xl bg-white/80 dark:bg-neutral-800/80 hover:bg-white dark:hover:bg-neutral-700 text-neutral-900 dark:text-white border border-black/10 dark:border-white/15 font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-2xs"
+                >
+                  <FileText className="w-4 h-4 text-amber-500" />
+                  <span>Curriculum Vitae</span>
+                  <span className="text-[10px] font-mono font-bold bg-neutral-200 dark:bg-neutral-700 text-neutral-800 dark:text-neutral-200 px-1.5 py-0.5 rounded-md">
+                    9.33 CGPA
+                  </span>
+                </button>
+              </Magnet>
+            </div>
+          </div>
+
+          {/* Subtitle / Rotating Specialization Column */}
+          <div className="flex flex-col md:items-end text-neutral-600 dark:text-neutral-300 text-sm sm:text-base font-normal max-w-md transition-colors">
+            <div className="font-semibold text-neutral-900 dark:text-white flex items-center gap-2 md:justify-end flex-wrap">
+              <span>Specializing in</span>
+              <span className="inline-flex px-2.5 py-0.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-mono text-xs sm:text-sm font-bold border border-indigo-500/20">
+                <RotatingText
+                  texts={[
+                    'AI & Machine Learning',
+                    'Full-Stack Development',
+                    'Cloud Computing',
+                    'Data Structures & Algorithms'
+                  ]}
+                  staggerFrom="last"
+                  initial={{ y: '100%', opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: '-100%', opacity: 0 }}
+                  staggerDuration={0.025}
+                  splitLevelClassName="overflow-hidden"
+                  transition={{ type: 'spring', damping: 25, stiffness: 250 }}
+                  rotationInterval={2800}
+                />
+              </span>
+            </div>
+            <span className="text-neutral-500 dark:text-neutral-400 text-xs sm:text-sm mt-1">
+              Hyderabad, India · CSE &amp; AI Product Engineering
+            </span>
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 md:text-right italic">
+              “Discovering what should exist next.”
+            </p>
+          </div>
         </div>
       </section>
 
@@ -70,16 +164,23 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 w-full pt-6 md:pt-8">
         
         {/* WIDGET 1: About Card (col-span-12 md:col-span-5 lg:col-span-4) */}
-        <div
-          onClick={() => onNavigate('about')}
+        <SpotlightCard
+          theme={theme}
+          spotlightColor={theme === 'dark' ? 'rgba(99, 102, 241, 0.22)' : 'rgba(99, 102, 241, 0.15)'}
+          style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+          onClick={() => {
+            playClickSound();
+            onNavigate('about');
+          }}
+          onMouseEnter={playHoverSound}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('about'); }}
-          className="col-span-12 md:col-span-5 lg:col-span-4 frosted-glass group rounded-3xl p-6 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:-translate-y-1 relative overflow-hidden min-h-[240px] md:min-h-[270px]"
+          className="col-span-12 md:col-span-5 lg:col-span-4 frosted-glass group rounded-3xl !p-6 md:!p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:-translate-y-1 relative min-h-[240px] md:min-h-[270px] shadow-[inset_0_1px_rgba(255,255,255,0.08),0_12px_32px_rgba(0,0,0,0.15)] dark:shadow-[inset_0_1px_rgba(255,255,255,0.04),0_16px_40px_rgba(0,0,0,0.5)]"
         >
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
+              <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
                 <Cpu className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />
                 <span>About / Story</span>
               </span>
@@ -92,16 +193,16 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               Engineering with Purpose
             </h2>
             <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed line-clamp-3">
-              Computer science student & builder exploring the intersection of AI, agentic systems, cybersecurity, and thoughtful product design.
+              Computer science student &amp; builder exploring the intersection of AI, agentic systems, cybersecurity, and thoughtful product design.
             </p>
           </div>
 
           <div className="pt-4 border-t border-black/5 dark:border-white/10 mt-3 flex items-center justify-between">
             <div className="flex flex-wrap gap-1.5">
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300">
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-mono">
                 Agentic Systems
               </span>
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300">
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-mono">
                 Cybersecurity
               </span>
             </div>
@@ -109,20 +210,27 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               Read more →
             </span>
           </div>
-        </div>
+        </SpotlightCard>
 
         {/* WIDGET 2: Portfolio / Selected Work Card (col-span-12 md:col-span-7 lg:col-span-8) */}
-        <div
-          onClick={() => onNavigate('portfolio')}
+        <SpotlightCard
+          theme={theme}
+          spotlightColor={theme === 'dark' ? 'rgba(16, 185, 129, 0.22)' : 'rgba(16, 185, 129, 0.15)'}
+          style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+          onClick={() => {
+            playClickSound();
+            onNavigate('portfolio');
+          }}
+          onMouseEnter={playHoverSound}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('portfolio'); }}
-          className="col-span-12 md:col-span-7 lg:col-span-8 frosted-glass group rounded-3xl p-6 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:-translate-y-1 relative overflow-hidden min-h-[240px] md:min-h-[270px]"
+          className="col-span-12 md:col-span-7 lg:col-span-8 frosted-glass group rounded-3xl !p-6 md:!p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:-translate-y-1 relative min-h-[240px] md:min-h-[270px] shadow-[inset_0_1px_rgba(255,255,255,0.08),0_12px_32px_rgba(0,0,0,0.15)] dark:shadow-[inset_0_1px_rgba(255,255,255,0.04),0_16px_40px_rgba(0,0,0,0.5)]"
         >
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
+                <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
                   <Layers className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />
                   <span>Selected Work</span>
                 </span>
@@ -137,9 +245,9 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
 
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-3">
               <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white transition-colors">
-                Selected Work & Systems
+                Selected Work &amp; Systems
               </h2>
-              <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
+              <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium font-mono">
                 AI · Security · Full-Stack Products
               </span>
             </div>
@@ -147,26 +255,36 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
             {/* Mini Project Pill Highlights */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
               <div
-                onClick={(e) => { e.stopPropagation(); onOpenProject('garuda-x'); }}
-                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playClickSound();
+                  onOpenProject('garuda-x');
+                }}
+                onMouseEnter={playHoverSound}
+                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400">02</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 font-mono">02</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
                 </div>
-                <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 transition-colors">
+                <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-cyan-500 dark:group-hover/item:text-cyan-400 transition-colors">
                   GARUDA
                 </div>
                 <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate font-mono">Python · Scapy · SOC HUD</p>
               </div>
 
               <div
-                onClick={(e) => { e.stopPropagation(); onOpenProject('edge'); }}
-                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playClickSound();
+                  onOpenProject('edge');
+                }}
+                onMouseEnter={playHoverSound}
+                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400">01</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 font-mono">01</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
                 <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400 transition-colors">
                   EDGE Engine
@@ -175,12 +293,17 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               </div>
 
               <div
-                onClick={(e) => { e.stopPropagation(); onOpenProject('teamforge-ai'); }}
-                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playClickSound();
+                  onOpenProject('teamforge-ai');
+                }}
+                onMouseEnter={playHoverSound}
+                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400">03</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 font-mono">03</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                 </div>
                 <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-amber-600 dark:group-hover/item:text-amber-400 transition-colors">
                   TeamForge AI
@@ -191,14 +314,14 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
           </div>
 
           <div className="pt-3 border-t border-black/5 dark:border-white/10 mt-3 flex items-center justify-between text-xs">
-            <span className="text-neutral-500 dark:text-neutral-400 hidden sm:inline">
-              + JanSahayak, QuickPitch & VibeVerse
+            <span className="text-neutral-500 dark:text-neutral-400 hidden sm:inline font-mono">
+              + JanSahayak, QuickPitch &amp; VibeVerse
             </span>
             <span className="font-semibold text-neutral-950 dark:text-neutral-200 group-hover:underline">
-              Explore all projects & code →
+              Explore all projects &amp; code →
             </span>
           </div>
-        </div>
+        </SpotlightCard>
 
         {/* WIDGET 3: Identity / Portrait Card (col-span-12 md:col-span-5 lg:col-span-4) */}
         <IdentityCard
@@ -212,12 +335,19 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
         </div>
 
         {/* WIDGET 5: Enriched "Let's Connect" Card (col-span-12 md:col-span-6 lg:col-span-6) */}
-        <div
-          onClick={() => onNavigate('contact')}
+        <SpotlightCard
+          theme={theme}
+          spotlightColor={theme === 'dark' ? 'rgba(139, 92, 246, 0.22)' : 'rgba(139, 92, 246, 0.15)'}
+          style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+          onClick={() => {
+            playClickSound();
+            onNavigate('contact');
+          }}
+          onMouseEnter={playHoverSound}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('contact'); }}
-          className="col-span-12 md:col-span-6 lg:col-span-6 frosted-glass group rounded-3xl p-6 md:p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:-translate-y-1 relative"
+          className="col-span-12 md:col-span-6 lg:col-span-6 frosted-glass group rounded-3xl !p-6 md:!p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:-translate-y-1 relative shadow-[inset_0_1px_rgba(255,255,255,0.08),0_12px_32px_rgba(0,0,0,0.15)] dark:shadow-[inset_0_1px_rgba(255,255,255,0.04),0_16px_40px_rgba(0,0,0,0.5)]"
         >
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -231,7 +361,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
             </div>
 
             <div className="flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-xs font-medium text-emerald-800 dark:text-emerald-400">
                 Open for high-impact engineering roles &amp; collaborations
               </span>
@@ -247,12 +377,15 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               <div className="flex items-center justify-between text-xs bg-white/80 dark:bg-neutral-800/80 rounded-xl px-3.5 py-2.5 border border-black/5 dark:border-white/10">
                 <div className="flex items-center gap-2 truncate mr-2">
                   <Mail className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
-                  <span className="text-neutral-900 dark:text-white font-medium truncate">{PERSONAL_INFO.email}</span>
+                  <span className="text-neutral-900 dark:text-white font-medium truncate font-mono">{PERSONAL_INFO.email}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <a
                     href={`mailto:${PERSONAL_INFO.email}`}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playClickSound();
+                    }}
                     className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
                     title="Send Email"
                   >
@@ -261,7 +394,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                   </a>
                   <button
                     onClick={handleCopyEmail}
-                    className="text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-700"
+                    className="text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-700 cursor-pointer"
                     title="Copy email"
                   >
                     {copiedEmail ? (
@@ -283,14 +416,17 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               <div className="flex items-center justify-between text-xs bg-white/80 dark:bg-neutral-800/80 rounded-xl px-3.5 py-2.5 border border-black/5 dark:border-white/10">
                 <div className="flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
-                  <span className="text-neutral-900 dark:text-white font-semibold">{PERSONAL_INFO.formattedPhone}</span>
+                  <span className="text-neutral-900 dark:text-white font-semibold font-mono">{PERSONAL_INFO.formattedPhone}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <a
                     href={`https://wa.me/918074142645?text=Hi%20Dhruva,%20saw%20your%20portfolio`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playClickSound();
+                    }}
                     className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
                   >
                     <span>WhatsApp</span>
@@ -298,7 +434,10 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                   </a>
                   <a
                     href={`tel:${PERSONAL_INFO.phone}`}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playClickSound();
+                    }}
                     className="text-[11px] font-semibold text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white px-2 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-700"
                   >
                     Direct Call
@@ -331,30 +470,36 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               <ArrowUpRight className="w-3.5 h-3.5" />
             </span>
           </div>
-        </div>
+        </SpotlightCard>
 
         {/* WIDGET 6: Official Resume, LinkedIn & GitHub Card (col-span-12 md:col-span-6 lg:col-span-6) */}
-        <div className="col-span-12 md:col-span-6 lg:col-span-6 frosted-glass group rounded-3xl p-6 md:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 relative">
+        <SpotlightCard
+          theme={theme}
+          spotlightColor={theme === 'dark' ? 'rgba(245, 158, 11, 0.22)' : 'rgba(245, 158, 11, 0.15)'}
+          style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+          onMouseEnter={playHoverSound}
+          className="col-span-12 md:col-span-6 lg:col-span-6 frosted-glass group rounded-3xl !p-6 md:!p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 relative shadow-[inset_0_1px_rgba(255,255,255,0.08),0_12px_32px_rgba(0,0,0,0.15)] dark:shadow-[inset_0_1px_rgba(255,255,255,0.04),0_16px_40px_rgba(0,0,0,0.5)]"
+        >
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
                 <FileText className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />
                 <span>Verified Credentials &amp; Profiles</span>
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 font-mono">
                 Verified
               </span>
             </div>
 
             {/* Official Resume Action Banner */}
-            <div className="bg-white/80 dark:bg-neutral-800/80 rounded-2xl p-4 border border-black/5 dark:border-white/10 mb-4 flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+            <div className="bg-white/80 dark:bg-neutral-800/80 rounded-2xl p-4 border border-black/5 dark:border-white/10 mb-4 flex flex-col xl:flex-row xl:items-center justify-between gap-3 shadow-2xs">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-bold text-sm text-neutral-950 dark:text-white">
                     Official Curriculum Vitae
                   </span>
-                  <span className="text-[10px] font-mono font-bold bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 px-2 py-0.5 rounded-full">
-                    9.33 CGPA
+                  <span className="text-[10px] font-mono font-bold bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <CountUp to={9.33} from={0} decimals={2} duration={1.2} /> CGPA
                   </span>
                 </div>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
@@ -362,14 +507,19 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 </p>
               </div>
 
-              <button
-                onClick={onOpenResume}
-                className="bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 rounded-xl px-4 py-2 flex items-center justify-center gap-2 text-xs font-bold shadow-xs transition-all shrink-0 cursor-pointer w-full xl:w-auto"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>View Resume</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
+              <Magnet padding={12} magnetStrength={2}>
+                <button
+                  onClick={() => {
+                    playClickSound();
+                    onOpenResume();
+                  }}
+                  className="bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 rounded-xl px-4 py-2 flex items-center justify-center gap-2 text-xs font-bold shadow-xs transition-all shrink-0 cursor-pointer w-full xl:w-auto"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>View Resume</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              </Magnet>
             </div>
 
             {/* Profiles: GitHub & LinkedIn Double Tile */}
@@ -378,6 +528,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 href={PERSONAL_INFO.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={playClickSound}
                 className="p-3.5 rounded-xl bg-white/70 dark:bg-neutral-800/60 hover:bg-white dark:hover:bg-neutral-700 border border-black/5 dark:border-white/10 flex items-center justify-between group/link transition-all"
               >
                 <div className="flex items-center gap-2.5">
@@ -400,6 +551,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 href={PERSONAL_INFO.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={playClickSound}
                 className="p-3.5 rounded-xl bg-white/70 dark:bg-neutral-800/60 hover:bg-white dark:hover:bg-neutral-700 border border-black/5 dark:border-white/10 flex items-center justify-between group/link transition-all"
               >
                 <div className="flex items-center gap-2.5">
@@ -439,26 +591,34 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
           <div className="pt-3 border-t border-black/5 dark:border-white/10 mt-4 flex items-center justify-between text-xs">
             <span className="text-neutral-500 dark:text-neutral-400">Verified Credentials</span>
             <button
-              onClick={onOpenResume}
+              onClick={() => {
+                playClickSound();
+                onOpenResume();
+              }}
               className="font-semibold text-neutral-900 dark:text-neutral-200 group-hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>View full resume</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
-        </div>
+        </SpotlightCard>
+      </div>
+
+      {/* Infinite Tech Stack Marquee (Pranjal Mishra Inspired) */}
+      <div className="mt-12 sm:mt-16">
+        <TechMarquee />
       </div>
 
       {/* Footer Bottom Bar with Live Visitor Counter */}
       <footer className="w-full pt-12 mt-8 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 dark:text-neutral-400">
         <div>
-          © 2026 {PERSONAL_INFO.name}. Built with precision and clarity.
+          © 2026 {PERSONAL_INFO.name}. Built with precision, systems thinking, and purpose.
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <VisitorCounter />
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-200 text-xs font-medium border border-neutral-300 dark:border-white/10 shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Open to Opportunities</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <ShinyText text="Open to Opportunities" speed={2.5} className="text-neutral-900 dark:text-neutral-200 font-medium" />
           </div>
         </div>
       </footer>

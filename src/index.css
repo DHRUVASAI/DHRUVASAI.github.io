@@ -159,6 +159,24 @@
   }
 }
 
+@keyframes marqueeLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marqueeRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
 @keyframes popIn {
   0% {
     opacity: 0;
@@ -177,3 +195,29 @@
 .animate-pop-in {
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
+
+/* Dobby Interactive Speaking & Equalizer Animations */
+@keyframes dobbySpeaking {
+  0%, 100% {
+    transform: scale(1.02) translateY(0);
+  }
+  25% {
+    transform: scale(1.06) translateY(-2px);
+  }
+  50% {
+    transform: scale(1) translateY(1px);
+  }
+  75% {
+    transform: scale(1.05) translateY(-1.5px);
+  }
+}
+
+@keyframes soundWave {
+  0%, 100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1.2);
+  }
+}
+

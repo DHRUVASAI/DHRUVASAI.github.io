@@ -4,13 +4,31 @@ import { filterProjects } from '../utils/portfolio.ts';
 import { ArrowUpRight, Github, ExternalLink, Activity, Shield, Sparkles, Terminal, Cpu, Database, Network, GitBranch, Layers, CheckCircle2 } from 'lucide-react';
 import { GitDiagramArchitecture } from './GitDiagramArchitecture.tsx';
 import { VisitorCounter } from './VisitorCounter.tsx';
+import DecryptedText from './ui/DecryptedText/DecryptedText';
+import ShinyText from './ui/ShinyText/ShinyText';
+import SpotlightCard from './ui/SpotlightCard/SpotlightCard';
+import Magnet from './ui/Magnet/Magnet';
+import { useTheme } from '../context/ThemeContext.tsx';
 
 interface PortfolioViewProps {
   onOpenProject: (projectId: string) => void;
   onNavigate: (view: 'home' | 'about' | 'portfolio' | 'contact') => void;
 }
 
+const getProjectSpotlightColor = (id: string, isDark: boolean) => {
+  switch (id) {
+    case 'garuda-x': return isDark ? 'rgba(6, 182, 212, 0.22)' : 'rgba(6, 182, 212, 0.14)';
+    case 'edge': return isDark ? 'rgba(16, 185, 129, 0.22)' : 'rgba(16, 185, 129, 0.14)';
+    case 'vibeverse': return isDark ? 'rgba(168, 85, 247, 0.22)' : 'rgba(168, 85, 247, 0.14)';
+    case 'teamforge-ai': return isDark ? 'rgba(245, 158, 11, 0.22)' : 'rgba(245, 158, 11, 0.14)';
+    case 'jansahayak': return isDark ? 'rgba(59, 130, 246, 0.22)' : 'rgba(59, 130, 246, 0.14)';
+    case 'quickpitch-ai': return isDark ? 'rgba(236, 72, 153, 0.22)' : 'rgba(236, 72, 153, 0.14)';
+    default: return isDark ? 'rgba(99, 102, 241, 0.22)' : 'rgba(99, 102, 241, 0.14)';
+  }
+};
+
 export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onNavigate }) => {
+  const { theme } = useTheme();
   const [selectedFilter, setSelectedFilter] = useState<string>('All');
   const [activeTabMap, setActiveTabMap] = useState<Record<string, 'preview' | 'architecture'>>({});
   const [customProjectImages, setCustomProjectImages] = useState<Record<string, string>>({});
@@ -595,12 +613,22 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
         <section className="max-w-4xl mb-12 md:mb-16">
           <div className="flex items-center gap-2 mb-3">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-semibold">
-              Selected Work · 6 Production Projects
-            </span>
+            <ShinyText
+              text="Selected Work · 6 Production Projects"
+              speed={3}
+              className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-semibold"
+            />
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[68px] leading-[1.12] font-bold tracking-tight text-neutral-950 dark:text-white transition-colors">
-            Systems that solve real problems, challenge conventions, and ship to the world
+            <DecryptedText
+              text="Systems that solve real problems, challenge conventions, and ship to the world"
+              speed={30}
+              maxIterations={12}
+              animateOn="view"
+              revealDirection="start"
+              className="text-neutral-950 dark:text-white"
+              encryptedClassName="text-neutral-400 dark:text-neutral-600 font-mono"
+            />
           </h1>
           <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-300 mt-4 max-w-2xl transition-colors">
             Real production architectures and user interfaces built across AI/ML, agentic orchestration, cybersecurity intelligence, and automated public systems.
@@ -630,9 +658,12 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
             const currentTab = activeTabMap[project.id] || 'preview';
 
             return (
-              <article
+              <SpotlightCard
                 key={project.id}
-                className="group cursor-pointer flex flex-col justify-between bg-neutral-200/50 dark:bg-[#12141c]/80 rounded-[32px] p-4 sm:p-6 border border-neutral-300/70 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20 hover:shadow-sm transition-all"
+                theme={theme}
+                spotlightColor={getProjectSpotlightColor(project.id, theme === 'dark')}
+                style={{ '--spotlight-card-surface': 'transparent' } as React.CSSProperties}
+                className="group cursor-pointer flex flex-col justify-between bg-neutral-200/50 dark:bg-[#12141c]/80 rounded-[32px] !p-4 sm:!p-6 border border-neutral-300/70 dark:border-white/10 hover:border-neutral-400 dark:hover:border-white/20 hover:shadow-sm transition-all"
                 onClick={() => onOpenProject(project.id)}
               >
                 {/* Header Switcher: UI Preview vs Architecture Diagram */}
@@ -710,19 +741,21 @@ export const PortfolioView: React.FC<PortfolioViewProps> = ({ onOpenProject, onN
                     <span className="text-neutral-600 dark:text-neutral-400 font-mono text-[11px] truncate max-w-[200px]">
                       {project.metrics}
                     </span>
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1.5 font-semibold text-neutral-900 dark:text-white hover:text-black dark:hover:text-neutral-200 py-1 px-2.5 rounded-lg bg-white/80 dark:bg-neutral-800 hover:bg-white dark:hover:bg-neutral-700 border border-black/5 dark:border-white/10 transition-all shadow-2xs"
-                    >
-                      <Github className="w-3.5 h-3.5" />
-                      <span>View Project →</span>
-                    </a>
+                    <Magnet padding={8} magnetStrength={2}>
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1.5 font-semibold text-neutral-900 dark:text-white hover:text-black dark:hover:text-neutral-200 py-1 px-2.5 rounded-lg bg-white/80 dark:bg-neutral-800 hover:bg-white dark:hover:bg-neutral-700 border border-black/5 dark:border-white/10 transition-all shadow-2xs cursor-pointer"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                        <span>View Project →</span>
+                      </a>
+                    </Magnet>
                   </div>
                 </div>
-              </article>
+              </SpotlightCard>
             );
           })}
         </section>

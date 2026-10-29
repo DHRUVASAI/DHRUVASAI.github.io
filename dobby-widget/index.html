@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dobby — Interactive Profile Pic</title>
+<!-- HOW TO USE ON YOUR WEBSITE:
+     1. Copy this whole folder (index.html + dobby.png + the 4 mp4 files) into your site.
+     2. Or copy just the <div class="dobby-widget"> … </div> block + the <style> and
+        <script> below into your own page, keeping the video/image files next to it.
+     3. No libraries, no build step, no server needed — plain HTML/CSS/JS. -->
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center;
+    background: #f7f2ea; font-family: system-ui, sans-serif; color: #42102e;
+  }
+  .dobby-widget { text-align: center; perspective: 800px; }
+  .dobby-stage {
+    width: 280px; height: 280px; margin: 0 auto; border-radius: 50%;
+    overflow: hidden; cursor: pointer; position: relative;
+    border: 5px solid #e8a800; background: #fff;
+    box-shadow: 0 12px 32px rgba(66,16,46,.25);
+    transition: transform .15s ease-out;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+  .dobby-stage video, .dobby-stage img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .dobby-bubble {
+    min-height: 30px; margin-top: 18px; font-size: 18px; font-weight: 600;
+  }
+  .dobby-buttons { margin-top: 12px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .dobby-buttons button {
+    border: 2px solid #42102e; background: #fff; color: #42102e;
+    padding: 8px 14px; border-radius: 999px; cursor: pointer; font-weight: 600;
+  }
+  .dobby-buttons button:hover, .dobby-buttons button.active { background: #42102e; color: #fff; }
+  .dobby-hint { color: #777; font-size: 13px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="dobby-widget">
+  <div class="dobby-stage" id="stage" title="Click Dobby!">
+    <!-- Idle animation loops by default, exactly like Dobby in Muse -->
+    <video id="dobbyVideo" autoplay loop muted playsinline poster="dobby.png">
+      <source src="dobby-idle.mp4" type="video/mp4">
+      <img src="dobby.png" alt="Dobby the house-elf">
+    </video>
+  </div>
+  <div class="dobby-bubble" id="bubble">🧦 Dobby is here, Master! Click Dobby!</div>
+  <div class="dobby-buttons">
+    <button data-state="idle" class="active">Idle</button>
+    <button data-state="working">Working</button>
+    <button data-state="making">Making something</button>
+    <button data-state="celebrating">Celebrating</button>
+  </div>
+  <p class="dobby-hint">Move your mouse over Dobby — he tilts. Click him — he snaps his fingers and celebrates.</p>
+</div>
+<script>
+  const stage = document.getElementById('stage');
+  const video = document.getElementById('dobbyVideo');
+  const bubble = document.getElementById('bubble');
+  const buttons = document.querySelectorAll('.dobby-buttons button');
+
+  const STATES = {
+    idle:        { file: 'dobby-idle.mp4',        line: '🧦 Dobby is here, Master! Click Dobby!' },
+    working:     { file: 'dobby-working.mp4',     line: '✨ Dobby is working hard for you, Master!' },
+    making:      { file: 'dobby-making.mp4',      line: '🔨 Dobby is making something special!' },
+    celebrating: { file: 'dobby-celebrating.mp4', line: '🎉 Dobby did it! Dobby is a free elf!' },
+  };
+  function setState(name) {
+    const s = STATES[name];
+    video.src = s.file; video.play();
+    bubble.textContent = s.line;
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.state === name));
+  }
+  buttons.forEach(b => b.addEventListener('click', () => setState(b.dataset.state)));
+
+  // Click Dobby = finger-snap celebration, then back to idle
+  stage.addEventListener('click', () => {
+    setState('celebrating');
+    setTimeout(() => setState('idle'), 4000);
+  });
+
+  // Mouse tilt, same playful feel as an interactive avatar
+  stage.addEventListener('mousemove', (e) => {
+    const r = stage.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    stage.style.transform = `rotateY(${x * 16}deg) rotateX(${-y * 16}deg) scale(1.04)`;
+  });
+  stage.addEventListener('mouseleave', () => { stage.style.transform = ''; });
+</script>
+</body>
+</html>

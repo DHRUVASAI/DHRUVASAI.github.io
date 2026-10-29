@@ -8,8 +8,12 @@ import { ProjectDetailModal } from './components/ProjectDetailModal.tsx';
 import { ResumeModal } from './components/ResumeModal.tsx';
 import { GeminiChatbot } from './components/GeminiChatbot.tsx';
 import { OpeningAnimation } from './components/OpeningAnimation.tsx';
+import { AtmosphericBackground } from './components/AtmosphericBackground.tsx';
+import { InteractiveDock } from './components/InteractiveDock.tsx';
+import { CommandTerminalModal } from './components/CommandTerminalModal.tsx';
 import { ThemeProvider } from './context/ThemeContext.tsx';
 import { getProjectById } from './utils/portfolio.ts';
+import ClickSpark from './components/ui/ClickSpark/ClickSpark';
 
 type ViewType = 'home' | 'about' | 'portfolio' | 'contact';
 
@@ -17,6 +21,7 @@ function AppContent() {
   const [currentView, setCurrentView] = useState<ViewType>('home');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState<boolean>(false);
   const [showOpening, setShowOpening] = useState<boolean>(() => {
     try {
       if (typeof window !== 'undefined') {
@@ -67,95 +72,125 @@ function AppContent() {
   const selectedProject = selectedProjectId ? getProjectById(selectedProjectId) || null : null;
 
   return (
-    <div className="min-h-screen bg-[#ECECEB] dark:bg-[#090A0E] text-[#111111] dark:text-[#ECECED] flex flex-col justify-between selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-300 relative overflow-x-hidden">
-      {/* Skip to Main Content Link for Keyboard & Screen Readers */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-neutral-900 focus:text-white dark:focus:bg-white dark:focus:text-neutral-900 focus:rounded-xl focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold"
-      >
-        Skip to main content
-      </a>
+    <ClickSpark
+      sparkColor={['#6366f1', '#10b981', '#f59e0b', '#38bdf8']}
+      sparkSize={8}
+      sparkRadius={18}
+      sparkCount={7}
+      duration={400}
+    >
+      <div className="min-h-screen bg-[#ECECEB] dark:bg-[#070A14] text-[#111111] dark:text-[#ECECED] flex flex-col justify-between selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-300 relative overflow-x-hidden">
+        {/* Dynamic Atmospheric Canvas with Laser Pillars & Cursor Glow */}
+        <AtmosphericBackground />
 
-      {/* Opening Intro Animation */}
-      {showOpening && (
-        <OpeningAnimation
-          onComplete={handleOpeningComplete}
-        />
-      )}
+        {/* Skip to Main Content Link for Keyboard & Screen Readers */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-neutral-900 focus:text-white dark:focus:bg-white dark:focus:text-neutral-900 focus:rounded-xl focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold"
+        >
+          Skip to main content
+        </a>
 
-      {/* Cinematic Reveal Beam Effect on Entrance */}
-      {isRevealing && (
-        <div className="fixed inset-0 pointer-events-none z-30 bg-gradient-to-b from-indigo-500/15 via-emerald-500/5 to-transparent transition-opacity duration-1000" />
-      )}
+        {/* Opening Intro Animation */}
+        {showOpening && (
+          <OpeningAnimation
+            onComplete={handleOpeningComplete}
+          />
+        )}
 
-      {/* Top Navbar with Night Mode toggle and Entrance Transition */}
-      <div
-        className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          showOpening
-            ? 'opacity-0 -translate-y-6 pointer-events-none'
-            : 'opacity-100 translate-y-0'
-        }`}
-      >
-        <Navbar
-          currentView={currentView}
+        {/* Cinematic Reveal Beam Effect on Entrance */}
+        {isRevealing && (
+          <div className="fixed inset-0 pointer-events-none z-30 bg-gradient-to-b from-indigo-500/15 via-emerald-500/5 to-transparent transition-opacity duration-1000" />
+        )}
+
+        {/* Top Navbar with Entrance Transition */}
+        <div
+          className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-30 ${
+            showOpening
+              ? 'opacity-0 -translate-y-6 pointer-events-none'
+              : 'opacity-100 translate-y-0'
+          }`}
+        >
+          <Navbar
+            currentView={currentView}
+            onNavigate={navigateTo}
+            onOpenResume={() => setIsResumeOpen(true)}
+            onPlayOpening={() => setShowOpening(true)}
+          />
+        </div>
+
+        {/* Main View Transition from Opening Animation */}
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className={`flex-1 flex flex-col justify-start outline-none transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-10 ${
+            showOpening
+              ? 'opacity-0 scale-[0.98] translate-y-8 blur-[2px] pointer-events-none'
+              : 'opacity-100 scale-100 translate-y-0 blur-0'
+          }`}
+        >
+          {currentView === 'home' && (
+            <HomeBento
+              onNavigate={navigateTo}
+              onOpenProject={handleOpenProject}
+              onOpenResume={() => setIsResumeOpen(true)}
+            />
+          )}
+
+          {currentView === 'about' && (
+            <AboutView
+              onNavigate={navigateTo}
+              onOpenProject={handleOpenProject}
+              onOpenResume={() => setIsResumeOpen(true)}
+            />
+          )}
+
+          {currentView === 'portfolio' && (
+            <PortfolioView
+              onOpenProject={handleOpenProject}
+              onNavigate={navigateTo}
+            />
+          )}
+
+          {currentView === 'contact' && (
+            <ContactView onNavigate={navigateTo} />
+          )}
+        </main>
+
+        {/* Floating Apple-Style Interactive Bottom Dock */}
+        {!showOpening && (
+          <InteractiveDock
+            currentView={currentView}
+            onNavigate={navigateTo}
+            onOpenResume={() => setIsResumeOpen(true)}
+            onOpenTerminal={() => setIsTerminalOpen(true)}
+          />
+        )}
+
+        {/* Interactive Gemini Chatbot */}
+        <GeminiChatbot />
+
+        {/* Interactive Systems Command Terminal (Cmd+K) */}
+        <CommandTerminalModal
+          isOpen={isTerminalOpen}
+          onClose={() => setIsTerminalOpen(false)}
+          onOpenProject={handleOpenProject}
           onNavigate={navigateTo}
           onOpenResume={() => setIsResumeOpen(true)}
-          onPlayOpening={() => setShowOpening(true)}
+        />
+
+        {/* Modals */}
+        <ProjectDetailModal
+          project={selectedProject}
+          onClose={() => setSelectedProjectId(null)}
+        />
+
+        <ResumeModal
+          isOpen={isResumeOpen}
+          onClose={() => setIsResumeOpen(false)}
         />
       </div>
-
-      {/* Main View Transition from Opening Animation */}
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className={`flex-1 flex flex-col justify-start outline-none transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          showOpening
-            ? 'opacity-0 scale-[0.98] translate-y-8 blur-[2px] pointer-events-none'
-            : 'opacity-100 scale-100 translate-y-0 blur-0'
-        }`}
-      >
-        {currentView === 'home' && (
-          <HomeBento
-            onNavigate={navigateTo}
-            onOpenProject={handleOpenProject}
-            onOpenResume={() => setIsResumeOpen(true)}
-          />
-        )}
-
-        {currentView === 'about' && (
-          <AboutView
-            onNavigate={navigateTo}
-            onOpenProject={handleOpenProject}
-            onOpenResume={() => setIsResumeOpen(true)}
-          />
-        )}
-
-        {currentView === 'portfolio' && (
-          <PortfolioView
-            onOpenProject={handleOpenProject}
-            onNavigate={navigateTo}
-          />
-        )}
-
-        {currentView === 'contact' && (
-          <ContactView onNavigate={navigateTo} />
-        )}
-      </main>
-
-      {/* Interactive Gemini Chatbot */}
-      <GeminiChatbot />
-
-      {/* Modals */}
-      <ProjectDetailModal
-        project={selectedProject}
-        onClose={() => setSelectedProjectId(null)}
-      />
-
-      <ResumeModal
-        isOpen={isResumeOpen}
-        onClose={() => setIsResumeOpen(false)}
-      />
-    </div>
+    </ClickSpark>
   );
 }
 
