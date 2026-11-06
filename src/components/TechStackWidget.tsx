@@ -339,74 +339,69 @@ export const TechStackWidget: React.FC = () => {
 
   return (
     <div className="frosted-glass rounded-3xl p-5 sm:p-6 md:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 h-full">
-      {/* Top Header - Spacious, Clean, Guaranteed No Overlap */}
+      {/* Top Header - Clean, Monochromatic, High-Scanability */}
       <div>
         <div className="flex items-center justify-between gap-3 pb-3.5 mb-3.5 border-b border-black/10 dark:border-white/10">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 dark:bg-indigo-400/15 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0 shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-neutral-900/5 dark:bg-white/10 border border-black/10 dark:border-white/10 flex items-center justify-center text-neutral-800 dark:text-neutral-200 shrink-0 shadow-2xs">
               <Cpu className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm sm:text-base font-bold tracking-tight text-neutral-950 dark:text-white truncate">
-                Core Stack &amp; Computer Science
-              </h3>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono truncate">
+              <h2 className="text-sm sm:text-base font-bold tracking-tight text-neutral-950 dark:text-white truncate">
+                Core Stack &amp; Technical Disciplines
+              </h2>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 font-mono truncate">
                 Languages · Frontend · Cloud · Databases · Systems
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>19 Technologies</span>
+            <span className="text-xs font-mono font-medium px-2.5 py-1 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 border border-black/5 dark:border-white/10">
+              19 Technologies
             </span>
           </div>
         </div>
 
-        {/* Content View: Neat Structured Group Rows */}
-        <div className="space-y-3 pt-1">
-            {groups.map((group) => {
-              const items = TECH_ITEMS.filter((item) => item.category === group.category);
-              return (
-                <div
-                  key={group.category}
-                  className="flex flex-col lg:flex-row lg:items-center gap-2 py-1.5 border-b border-black/5 dark:border-white/5 last:border-none"
-                >
-                  {/* Category Label */}
-                  <div className="w-44 shrink-0 flex items-center gap-2 text-[11px] font-mono text-neutral-600 dark:text-neutral-400 font-medium">
-                    <span
-                      className="w-2 h-2 rounded-full shrink-0"
-                      style={{ backgroundColor: group.color }}
-                    ></span>
-                    <span className="truncate">{group.title}</span>
-                  </div>
+        {/* Content View: Monochromatic, High-Rhythm Structured Group Rows */}
+        <div className="space-y-3.5 pt-1">
+          {groups.map((group) => {
+            const items = TECH_ITEMS.filter((item) => item.category === group.category);
+            return (
+              <div
+                key={group.category}
+                className="flex flex-col lg:flex-row lg:items-center gap-2.5 py-1.5 border-b border-black/5 dark:border-white/5 last:border-none"
+              >
+                {/* Category Label - Semantic h3 hierarchy */}
+                <h3 className="w-44 shrink-0 text-xs font-mono font-semibold text-neutral-700 dark:text-neutral-300">
+                  <span className="truncate">{group.title}</span>
+                </h3>
 
-                  {/* Compact Clean Technology Badges */}
-                  <div className="flex flex-wrap items-center gap-1.5 flex-1">
-                    {items.map((tech) => (
-                      <div
-                        key={tech.id}
-                        className="group/tech inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/80 dark:bg-neutral-800/80 hover:bg-white dark:hover:bg-neutral-700 border border-black/5 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 transition-all shadow-2xs"
-                        title={`${tech.name} · ${tech.level}`}
-                      >
-                        <span className="w-4 h-4 flex items-center justify-center shrink-0 group-hover/tech:scale-110 transition-transform">
-                          {tech.icon}
-                        </span>
-                        <span className="text-xs font-semibold text-neutral-900 dark:text-white">
-                          {tech.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                {/* Unified Monochromatic Technology Badges */}
+                <div className="flex flex-wrap items-center gap-1.5 flex-1">
+                  {items.map((tech) => (
+                    <div
+                      key={tech.id}
+                      className="group/tech inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/80 dark:bg-neutral-800/80 hover:bg-white dark:hover:bg-neutral-700 border border-black/8 dark:border-white/10 transition-all shadow-2xs"
+                      title={`${tech.name} · ${tech.level}`}
+                    >
+                      <span className="w-4 h-4 flex items-center justify-center shrink-0 opacity-80 group-hover/tech:opacity-100 group-hover/tech:scale-105 transition-all">
+                        {tech.icon}
+                      </span>
+                      <span className="text-xs font-medium text-neutral-900 dark:text-white">
+                        {tech.name}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </div>
       </div>
 
       {/* Footer Info Strip */}
-      <div className="pt-3 border-t border-black/5 dark:border-white/10 mt-4 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+      <div className="pt-3 border-t border-black/5 dark:border-white/10 mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500 dark:text-neutral-400 font-mono">
         <div className="flex items-center gap-2">
           <span>5 Disciplines</span>
           <span>•</span>

@@ -38,12 +38,8 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenProject,
               encryptedClassName="text-neutral-400 dark:text-neutral-600 font-mono"
             />
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-neutral-600 dark:text-neutral-300 font-medium tracking-tight mt-3 transition-colors flex items-center gap-2">
-            <ShinyText
-              text={`${PERSONAL_INFO.role} · ${PERSONAL_INFO.location}`}
-              speed={3}
-              className="text-neutral-600 dark:text-neutral-300 font-medium"
-            />
+          <p className="text-base sm:text-lg md:text-xl text-neutral-700 dark:text-neutral-300 font-medium tracking-tight mt-3 transition-colors flex items-center gap-2">
+            <span>{PERSONAL_INFO.role} · {PERSONAL_INFO.location}</span>
           </p>
         </section>
 

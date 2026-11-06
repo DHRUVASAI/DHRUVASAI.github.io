@@ -23,14 +23,14 @@ export const IdentityCard: React.FC<IdentityCardProps> = ({ variant = 'bento', c
       {/* Card Footer */}
       <div className="absolute bottom-4 left-5 right-5 text-white flex items-end justify-between pointer-events-none z-10">
         <div>
-          <div className="text-[11px] uppercase tracking-wider text-emerald-400 font-bold font-mono">
-            AI Engineer
+          <div className="text-xs tracking-wider text-emerald-400 font-bold font-mono">
+            AI Systems Engineer
           </div>
-          <div className="text-base sm:text-lg font-bold tracking-tight text-white drop-shadow-md">
+          <h2 className="text-base sm:text-lg font-bold tracking-tight text-white drop-shadow-md">
             {PERSONAL_INFO.name}
-          </div>
+          </h2>
         </div>
-        <span className="text-[11px] px-3 py-1 rounded-full bg-black/70 dark:bg-black/85 backdrop-blur-md text-white font-semibold border border-white/20 flex items-center gap-1.5 shadow-md">
+        <span className="text-xs px-3 py-1 rounded-full bg-black/70 dark:bg-black/85 backdrop-blur-md text-white font-semibold border border-white/20 flex items-center gap-1.5 shadow-md">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Hyderabad, IN</span>
         </span>

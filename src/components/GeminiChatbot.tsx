@@ -232,15 +232,9 @@ What may Dobby fetch or explain for you today? Ask Dobby anything, and Dobby sha
         {!isOpen && (
           <button
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-2.5 pl-2.5 pr-4 py-2 rounded-full bg-neutral-950/90 hover:bg-neutral-900 text-white dark:bg-neutral-900/95 dark:hover:bg-black dark:text-white shadow-[0_12px_36px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:scale-105 border border-white/20 cursor-pointer ring-1 ring-emerald-500/30 hover:ring-emerald-400/70"
-            title="Chat with Dobby (Master Dhruva's Personal Assistant)"
+            className="group flex items-center gap-2.5 pl-2 pr-4 py-1.5 rounded-full bg-neutral-900/95 hover:bg-black dark:bg-neutral-800/95 dark:hover:bg-neutral-700 text-white shadow-[0_10px_25px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 border border-black/10 dark:border-white/15 cursor-pointer"
+            title="Chat with Dobby (Master Dhruva's AI Assistant)"
           >
-            {/* Live Green Beacon */}
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-
             {/* Interactive Dobby Avatar (Tracks Cursor Realtime) */}
             <DobbyAvatar
               size="sm"
@@ -250,14 +244,9 @@ What may Dobby fetch or explain for you today? Ask Dobby anything, and Dobby sha
               className="pointer-events-none"
             />
 
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-xs sm:text-sm tracking-tight text-white group-hover:text-emerald-300 transition-colors">
-                Ask Dobby
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 dark:bg-white/15 text-neutral-300 border border-white/10 hidden sm:inline">
-                Personal Assistant
-              </span>
-            </div>
+            <span className="font-semibold text-xs sm:text-sm tracking-tight text-white group-hover:text-neutral-200 transition-colors">
+              Ask Dobby
+            </span>
           </button>
         )}
       </div>

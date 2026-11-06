@@ -90,8 +90,8 @@ const blend = (from: number[], to: number[], amount: number) => {
 const ShinyText = ({
   text,
   children,
-  color = '#b5b5b5',
-  shineColor = '#ffffff',
+  color,
+  shineColor,
   speed = 2,
   delay = 0,
   angle = 120,
@@ -115,9 +115,13 @@ const ShinyText = ({
   const syncRef = useRef<(() => void) | null>(null);
   const content = children ?? text;
 
+  const isDark = typeof document !== 'undefined' ? document.documentElement.classList.contains('dark') : true;
+  const effectiveColor = color ?? (isDark ? '#cbd5e1' : '#334155');
+  const effectiveShineColor = shineColor ?? (isDark ? '#ffffff' : '#0f172a');
+
   settingsRef.current = {
-    color,
-    shineColor,
+    color: effectiveColor,
+    shineColor: effectiveShineColor,
     speed: Math.max(0.1, speed),
     delay: Math.max(0, delay),
     angle,
@@ -393,7 +397,7 @@ const ShinyText = ({
     <span
       ref={rootRef}
       className={`relative inline-block bg-no-repeat [background-size:100%_100%] bg-clip-text [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] ${className}`}
-      style={{ backgroundImage: `linear-gradient(${color}, ${color})`, ...style }}
+      style={{ backgroundImage: `linear-gradient(${effectiveColor}, ${effectiveColor})`, ...style }}
     >
       {content}
       {glow > 0 ? (

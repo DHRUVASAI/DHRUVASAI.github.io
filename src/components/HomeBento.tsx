@@ -62,7 +62,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
             <div className="flex flex-wrap items-center gap-2.5 mb-3 sm:mb-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:text-emerald-400 text-xs font-semibold shadow-2xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Available for Summer 2026 Roles</span>
+                <span>Available for Summer 2027 Roles</span>
               </div>
 
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/70 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs text-neutral-700 dark:text-neutral-300 font-mono">
@@ -70,7 +70,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 <span>{PERSONAL_INFO.email}</span>
                 <button
                   onClick={handleCopyEmail}
-                  className="ml-1 text-[10px] font-bold text-neutral-800 dark:text-neutral-200 hover:text-black dark:hover:text-white px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 cursor-pointer"
+                  className="ml-1 text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:text-black dark:hover:text-white px-2 py-0.5 rounded-md border border-neutral-300 dark:border-neutral-700 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 shadow-2xs transition-colors cursor-pointer"
                   title="Copy email to clipboard"
                 >
                   {copiedEmail ? 'Copied ✓' : 'Copy'}
@@ -78,18 +78,15 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               </div>
             </div>
 
-            {/* Display Name with DecryptedText */}
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.04] transition-colors">
-              <DecryptedText
-                text={PERSONAL_INFO.name}
-                speed={45}
-                maxIterations={14}
-                animateOn="view"
-                revealDirection="start"
-                className="text-neutral-950 dark:text-white"
-                encryptedClassName="text-neutral-400 dark:text-neutral-600 font-mono"
-              />
+            {/* Display Name - Crisp, Razor-Sharp Typography with Zero Ghosting */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.05] transition-colors">
+              {PERSONAL_INFO.name}
             </h1>
+
+            {/* Substantive Technical Biography & Engineering Scope */}
+            <p className="mt-4 text-sm sm:text-base text-neutral-700 dark:text-neutral-300 max-w-2xl leading-relaxed font-normal">
+              AI Systems Engineer &amp; Full-Stack Builder crafting high-reliability platforms, autonomous multi-agent architectures, and real-time cybersecurity systems. Undergraduate Computer Science scholar at KL University (9.33 CGPA) turning complex machine intelligence into resilient production software.
+            </p>
 
             {/* Dual Hero CTAs (View My Work & Resume) */}
             <div className="flex flex-wrap items-center gap-3 pt-5">
@@ -119,7 +116,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                 >
                   <FileText className="w-4 h-4 text-amber-500" />
                   <span>Curriculum Vitae</span>
-                  <span className="text-[10px] font-mono font-bold bg-neutral-200 dark:bg-neutral-700 text-neutral-800 dark:text-neutral-200 px-1.5 py-0.5 rounded-md">
+                  <span className="text-xs font-mono font-bold bg-neutral-200 dark:bg-neutral-700 text-neutral-800 dark:text-neutral-200 px-1.5 py-0.5 rounded-md">
                     9.33 CGPA
                   </span>
                 </button>
@@ -180,7 +177,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
         >
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
+              <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
                 <Cpu className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />
                 <span>About / Story</span>
               </span>
@@ -190,20 +187,23 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
             </div>
 
             <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white mb-2 transition-colors">
-              Engineering with Purpose
+              Engineering Philosophy &amp; Architecture
             </h2>
-            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed line-clamp-3">
-              Computer science student &amp; builder exploring the intersection of AI, agentic systems, cybersecurity, and thoughtful product design.
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+              Computer Science undergraduate scholar at KL University architecting high-reliability machine learning systems, autonomous multi-agent DAG pipelines, and real-time network defense tools. Blending low-level systems efficiency with intuitive, human-centered product craft to build software designed for real-world production scale.
             </p>
           </div>
 
           <div className="pt-4 border-t border-black/5 dark:border-white/10 mt-3 flex items-center justify-between">
             <div className="flex flex-wrap gap-1.5">
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-mono">
+              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-mono">
                 Agentic Systems
               </span>
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-mono">
-                Cybersecurity
+              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-mono">
+                Network Security
+              </span>
+              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-neutral-900/5 dark:bg-white/10 text-neutral-700 dark:text-neutral-300 font-mono">
+                Cloud &amp; OLAP
               </span>
             </div>
             <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-200 group-hover:underline">
@@ -230,11 +230,11 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
+                <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
                   <Layers className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />
                   <span>Selected Work</span>
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-medium">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-medium">
                   6 Featured
                 </span>
               </div>
@@ -245,14 +245,14 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
 
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-3">
               <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white transition-colors">
-                Selected Work &amp; Systems
+                Featured Systems &amp; Production Architecture
               </h2>
               <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium font-mono">
                 AI · Security · Full-Stack Products
               </span>
             </div>
 
-            {/* Mini Project Pill Highlights */}
+            {/* Mini Project Pill Highlights with semantic h3 headings and technical depth */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
               <div
                 onClick={(e) => {
@@ -261,16 +261,19 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                   onOpenProject('garuda-x');
                 }}
                 onMouseEnter={playHoverSound}
-                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
+                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-3 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 font-mono">02</span>
+                  <span className="text-xs font-bold text-neutral-500 dark:text-neutral-400 font-mono">01</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
                 </div>
-                <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-cyan-500 dark:group-hover/item:text-cyan-400 transition-colors">
+                <h3 className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-white group-hover/item:text-cyan-500 dark:group-hover/item:text-cyan-400 transition-colors">
                   GARUDA
-                </div>
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate font-mono">Python · Scapy · SOC HUD</p>
+                </h3>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate font-mono">Python · Scapy · SOC HUD</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">
+                  High-speed packet sniffer inspecting /24 subnets in 1.3s with sub-50ms threat scoring.
+                </p>
               </div>
 
               <div
@@ -280,16 +283,19 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                   onOpenProject('edge');
                 }}
                 onMouseEnter={playHoverSound}
-                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
+                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-3 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 font-mono">01</span>
+                  <span className="text-xs font-bold text-neutral-500 dark:text-neutral-400 font-mono">02</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 </div>
-                <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400 transition-colors">
+                <h3 className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-white group-hover/item:text-emerald-600 dark:group-hover/item:text-emerald-400 transition-colors">
                   EDGE Engine
-                </div>
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate font-mono">DuckDB · Monte Carlo</p>
+                </h3>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate font-mono">DuckDB · Monte Carlo</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">
+                  Analytics platform indexing 9.5M+ deliveries via DuckDB OLAP with Monte Carlo simulations.
+                </p>
               </div>
 
               <div
@@ -299,23 +305,26 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                   onOpenProject('teamforge-ai');
                 }}
                 onMouseEnter={playHoverSound}
-                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-2.5 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
+                className="bg-white/80 dark:bg-neutral-800/90 hover:bg-white dark:hover:bg-neutral-700/90 rounded-xl p-3 border border-black/5 dark:border-white/10 transition-all text-left group/item cursor-pointer shadow-2xs"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 font-mono">03</span>
+                  <span className="text-xs font-bold text-neutral-500 dark:text-neutral-400 font-mono">03</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                 </div>
-                <div className="font-semibold text-xs text-neutral-900 dark:text-white group-hover/item:text-amber-600 dark:group-hover/item:text-amber-400 transition-colors">
+                <h3 className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-white group-hover/item:text-amber-600 dark:group-hover/item:text-amber-400 transition-colors">
                   TeamForge AI
-                </div>
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate font-mono">Nemotron · Swarm DAG</p>
+                </h3>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate font-mono">Nemotron · Swarm DAG</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">
+                  Multi-agent engineering squad coordinated via Nemotron DAG routing &amp; Docker sandboxes.
+                </p>
               </div>
             </div>
           </div>
 
           <div className="pt-3 border-t border-black/5 dark:border-white/10 mt-3 flex items-center justify-between text-xs">
             <span className="text-neutral-500 dark:text-neutral-400 hidden sm:inline font-mono">
-              + JanSahayak, QuickPitch &amp; VibeVerse
+              Also: JanSahayak (AWS AI for Bharat), QuickPitch AI &amp; VibeVerse
             </span>
             <span className="font-semibold text-neutral-950 dark:text-neutral-200 group-hover:underline">
               Explore all projects &amp; code →
@@ -351,7 +360,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
         >
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
+              <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
                 <Mail className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />
                 <span>Let's Connect</span>
               </span>
@@ -367,17 +376,20 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               </span>
             </div>
 
-            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white mb-4 transition-colors">
-              Have an ambitious idea or engineering opportunity?
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white mb-2 transition-colors">
+              Engineering Collaborations &amp; Opportunities
             </h2>
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed mb-4">
+              Actively exploring Summer 2027 Software Engineering, AI/ML systems, and cloud infrastructure opportunities. Whether you are building high-throughput distributed applications, autonomous agent workflows, or production systems, I am ready to contribute.
+            </p>
 
             {/* Email & Phone Interactive Tiles */}
-            <div className="space-y-2 mb-4">
+            <div className="space-y-2.5 mb-4">
               {/* Email row */}
               <div className="flex items-center justify-between text-xs bg-white/80 dark:bg-neutral-800/80 rounded-xl px-3.5 py-2.5 border border-black/5 dark:border-white/10">
                 <div className="flex items-center gap-2 truncate mr-2">
                   <Mail className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
-                  <span className="text-neutral-900 dark:text-white font-medium truncate font-mono">{PERSONAL_INFO.email}</span>
+                  <span className="text-neutral-900 dark:text-white font-medium truncate font-mono text-xs">{PERSONAL_INFO.email}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <a
@@ -386,7 +398,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                       e.stopPropagation();
                       playClickSound();
                     }}
-                    className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+                    className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
                     title="Send Email"
                   >
                     <span>Write</span>
@@ -394,17 +406,17 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                   </a>
                   <button
                     onClick={handleCopyEmail}
-                    className="text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-700 cursor-pointer"
+                    className="text-neutral-700 dark:text-neutral-200 hover:text-black dark:hover:text-white flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border border-neutral-300 dark:border-neutral-600 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700/80 dark:hover:bg-neutral-700 shadow-2xs transition-colors cursor-pointer"
                     title="Copy email"
                   >
                     {copiedEmail ? (
                       <>
-                        <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         <span className="text-emerald-700 dark:text-emerald-300">Copied</span>
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3 h-3" />
+                        <Copy className="w-3.5 h-3.5" />
                         <span>Copy</span>
                       </>
                     )}
@@ -416,7 +428,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               <div className="flex items-center justify-between text-xs bg-white/80 dark:bg-neutral-800/80 rounded-xl px-3.5 py-2.5 border border-black/5 dark:border-white/10">
                 <div className="flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
-                  <span className="text-neutral-900 dark:text-white font-semibold font-mono">{PERSONAL_INFO.formattedPhone}</span>
+                  <span className="text-neutral-900 dark:text-white font-semibold font-mono text-xs">{PERSONAL_INFO.formattedPhone}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <a
@@ -427,7 +439,7 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                       e.stopPropagation();
                       playClickSound();
                     }}
-                    className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                    className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
                   >
                     <span>WhatsApp</span>
                     <ExternalLink className="w-3 h-3" />
@@ -438,27 +450,28 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                       e.stopPropagation();
                       playClickSound();
                     }}
-                    className="text-[11px] font-semibold text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white px-2 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-700"
+                    className="text-xs font-semibold text-neutral-700 dark:text-neutral-200 hover:text-black dark:hover:text-white px-2.5 py-1 rounded-md border border-neutral-300 dark:border-neutral-600 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700/80 dark:hover:bg-neutral-700 shadow-2xs transition-colors flex items-center gap-1"
                   >
-                    Direct Call
+                    <Phone className="w-3 h-3 text-neutral-500 dark:text-neutral-400" />
+                    <span>Direct Call</span>
                   </a>
                 </div>
               </div>
             </div>
 
             {/* Quick Badges: Location, Timezone, Response time */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 text-[11px] font-mono text-neutral-600 dark:text-neutral-400">
-              <div className="bg-neutral-100/80 dark:bg-neutral-900/60 rounded-lg p-2 border border-black/5 dark:border-white/5">
-                <span className="block text-[9px] text-neutral-400 uppercase">Location</span>
-                <span className="font-semibold text-neutral-800 dark:text-neutral-200 truncate block">Hyderabad, IN</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 text-xs font-mono text-neutral-600 dark:text-neutral-400">
+              <div className="bg-neutral-100/80 dark:bg-neutral-900/60 rounded-xl p-2.5 border border-black/5 dark:border-white/5">
+                <span className="block text-xs font-medium text-neutral-500 dark:text-neutral-400">Location</span>
+                <span className="font-semibold text-neutral-800 dark:text-neutral-200 truncate block mt-0.5">Hyderabad, IN</span>
               </div>
-              <div className="bg-neutral-100/80 dark:bg-neutral-900/60 rounded-lg p-2 border border-black/5 dark:border-white/5">
-                <span className="block text-[9px] text-neutral-400 uppercase">Timezone</span>
-                <span className="font-semibold text-neutral-800 dark:text-neutral-200 truncate block">IST (UTC+5:30)</span>
+              <div className="bg-neutral-100/80 dark:bg-neutral-900/60 rounded-xl p-2.5 border border-black/5 dark:border-white/5">
+                <span className="block text-xs font-medium text-neutral-500 dark:text-neutral-400">Timezone</span>
+                <span className="font-semibold text-neutral-800 dark:text-neutral-200 truncate block mt-0.5">IST (UTC+5:30)</span>
               </div>
-              <div className="col-span-1 sm:col-span-2 xl:col-span-1 bg-neutral-100/80 dark:bg-neutral-900/60 rounded-lg p-2 border border-black/5 dark:border-white/5">
-                <span className="block text-[9px] text-neutral-400 uppercase">Response</span>
-                <span className="font-semibold text-emerald-600 dark:text-emerald-400 truncate block">⚡ Under 2 hrs</span>
+              <div className="col-span-1 sm:col-span-2 xl:col-span-1 bg-neutral-100/80 dark:bg-neutral-900/60 rounded-xl p-2.5 border border-black/5 dark:border-white/5">
+                <span className="block text-xs font-medium text-neutral-500 dark:text-neutral-400">Response</span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400 truncate block mt-0.5">⚡ Under 2 hrs</span>
               </div>
             </div>
           </div>
@@ -482,44 +495,37 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
         >
           <div>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
+              <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 font-mono">
                 <FileText className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />
                 <span>Verified Credentials &amp; Profiles</span>
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 font-mono">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 font-mono">
                 Verified
               </span>
             </div>
 
-            {/* Official Resume Action Banner */}
-            <div className="bg-white/80 dark:bg-neutral-800/80 rounded-2xl p-4 border border-black/5 dark:border-white/10 mb-4 flex flex-col xl:flex-row xl:items-center justify-between gap-3 shadow-2xs">
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white mb-3 transition-colors">
+              Academic Honors &amp; Verified Credentials
+            </h2>
+
+            {/* Official Credentials Banner */}
+            <div className="bg-white/80 dark:bg-neutral-800/80 rounded-2xl p-4 border border-black/5 dark:border-white/10 mb-4 flex items-center justify-between gap-3 shadow-2xs">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-bold text-sm text-neutral-950 dark:text-white">
-                    Official Curriculum Vitae
-                  </span>
-                  <span className="text-[10px] font-mono font-bold bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <h3 className="font-bold text-sm text-neutral-950 dark:text-white">
+                    B.Tech Computer Science &amp; Engineering
+                  </h3>
+                  <span className="text-xs font-mono font-bold bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
                     <CountUp to={9.33} from={0} decimals={2} duration={1.2} /> CGPA
                   </span>
                 </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                  B.Tech Computer Science · KL University Hyderabad
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+                  KLEF / KL University Hyderabad · Top Academic Percentile Standing
                 </p>
               </div>
-
-              <Magnet padding={12} magnetStrength={2}>
-                <button
-                  onClick={() => {
-                    playClickSound();
-                    onOpenResume();
-                  }}
-                  className="bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 rounded-xl px-4 py-2 flex items-center justify-center gap-2 text-xs font-bold shadow-xs transition-all shrink-0 cursor-pointer w-full xl:w-auto"
-                >
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>View Resume</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
-              </Magnet>
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-mono shrink-0">
+                Top Tier
+              </span>
             </div>
 
             {/* Profiles: GitHub & LinkedIn Double Tile */}
@@ -536,10 +542,10 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                     <Github className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-neutral-900 dark:text-white group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-400 transition-colors">
+                    <div className="text-xs font-bold text-neutral-950 dark:text-white group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-400 transition-colors">
                       GitHub
                     </div>
-                    <div className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400">
+                    <div className="text-xs font-mono text-neutral-500 dark:text-neutral-400">
                       @DHRUVASAI
                     </div>
                   </div>
@@ -559,10 +565,10 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
                     <Linkedin className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-neutral-900 dark:text-white group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-400 transition-colors">
+                    <div className="text-xs font-bold text-neutral-950 dark:text-white group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-400 transition-colors">
                       LinkedIn
                     </div>
-                    <div className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400">
+                    <div className="text-xs font-mono text-neutral-500 dark:text-neutral-400">
                       in/vudatha-dhruva-sai
                     </div>
                   </div>
@@ -571,20 +577,31 @@ export const HomeBento: React.FC<HomeBentoProps> = ({
               </a>
             </div>
 
-            {/* Verified Certifications & Honors Pills */}
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-                AWS AI for Bharat Badge
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20">
-                Azure AI Fundamentals (AI-900)
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
-                Google Cloud Gen AI
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20">
-                CodeChef 2-Star
-              </span>
+            {/* Verified Certifications & Honors Pills with h3 */}
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-mono mb-2">
+                Accredited Certifications &amp; Achievements
+              </h3>
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                  AWS AI for Bharat Badge
+                </span>
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20">
+                  Azure AI Fundamentals (AI-900)
+                </span>
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  Google Cloud Gen AI
+                </span>
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20">
+                  CodeChef 2-Star
+                </span>
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border border-cyan-500/20">
+                  Cisco Data Analytics
+                </span>
+                <span className="text-xs font-mono px-2.5 py-0.5 rounded-md bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/20">
+                  Cambridge English B2
+                </span>
+              </div>
             </div>
           </div>
 
